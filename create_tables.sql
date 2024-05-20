@@ -1,7 +1,17 @@
 DROP TABLE IF EXISTS recipe;
 DROP TABLE IF EXISTS recipe_tag;
+DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS tag;
 
+CREATE TABLE user (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(255) UNIQUE,
+    email VARCHAR(255) UNIQUE,
+    password VARCHAR(255),
+    registration_date DATETIME,
+    last_login DATETIME,
+    is_admin BOOLEAN DEFAULT FALSE
+);
 
 CREATE TABLE recipe (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
