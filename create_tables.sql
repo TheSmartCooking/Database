@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS recipe;
 DROP TABLE IF EXISTS recipe_tag;
-DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS tag;
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS recipe;
 
 CREATE TABLE user (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -15,7 +15,7 @@ CREATE TABLE user (
 
 CREATE TABLE recipe (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
-    author VARCHAR(255),
+    author_id INT,
     title VARCHAR(255),
     description TEXT,
     ingredients TEXT,
@@ -40,7 +40,8 @@ CREATE TABLE recipe (
     user_favorites INT,
     allergen_information TEXT,
     flavor_profile VARCHAR(255),
-    status ENUM('verified', 'liked', 'hidden', 'banned') NULL
+    status ENUM('verified', 'liked', 'hidden', 'banned') NULL,
+    FOREIGN KEY (author_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE tag (
