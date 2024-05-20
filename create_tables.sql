@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS recipe_tag;
 DROP TABLE IF EXISTS tag;
+DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recipe;
 
@@ -34,7 +35,6 @@ CREATE TABLE recipe (
     rating FLOAT,
     number_of_reviews INT,
     nutritional_information TEXT,
-    comments TEXT,
     source VARCHAR(255),
     allergen_information TEXT,
     flavor_profile VARCHAR(255),
@@ -46,6 +46,16 @@ CREATE TABLE recipe (
 CREATE TABLE tag (
     tag_id INT AUTO_INCREMENT PRIMARY KEY,
     tag_name VARCHAR(255) UNIQUE
+);
+
+CREATE TABLE comment (
+    comment_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    recipe_id INT,
+    comment TEXT,
+    comment_date DATETIME,
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
 );
 
 CREATE TABLE recipe_tag (
