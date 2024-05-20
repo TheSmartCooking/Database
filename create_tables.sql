@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS recipe_like;
 DROP TABLE IF EXISTS comment_like;
+DROP TABLE IF EXISTS user_avatar;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recipe;
 
@@ -13,7 +14,14 @@ CREATE TABLE user (
     password VARCHAR(255),
     registration_date DATETIME,
     last_login DATETIME,
-    is_admin BOOLEAN DEFAULT FALSE
+    is_admin BOOLEAN DEFAULT FALSE,
+    avatar_id INT,
+    FOREIGN KEY (avatar_id) REFERENCES user_avatar(avatar_id) ON DELETE SET NULL
+);
+
+CREATE TABLE user_avatar (
+    avatar_id INT AUTO_INCREMENT PRIMARY KEY,
+    avatar_path VARCHAR(255) UNIQUE
 );
 
 CREATE TABLE recipe (
