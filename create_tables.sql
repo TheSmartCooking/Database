@@ -33,13 +33,12 @@ CREATE TABLE recipe (
     difficulty_level VARCHAR(255),
     rating FLOAT,
     number_of_reviews INT,
-    video_url VARCHAR(255),
     nutritional_information TEXT,
     comments TEXT,
-    source_url VARCHAR(255),
-    user_favorites INT,
+    source VARCHAR(255),
     allergen_information TEXT,
     flavor_profile VARCHAR(255),
+    video_url VARCHAR(255) NULL,
     status ENUM('verified', 'liked', 'hidden', 'banned') NULL,
     FOREIGN KEY (author_id) REFERENCES user(user_id) ON DELETE CASCADE
 );
