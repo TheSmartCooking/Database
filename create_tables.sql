@@ -1,6 +1,8 @@
 DROP TABLE IF EXISTS recipe_tag;
 DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS comment;
+DROP TABLE IF EXISTS recipe_like;
+DROP TABLE IF EXISTS comment_like;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recipe;
 
@@ -56,6 +58,22 @@ CREATE TABLE comment (
     comment_date DATETIME,
     FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
+);
+
+CREATE TABLE recipe_like (
+    like_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    recipe_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
+);
+
+CREATE TABLE comment_like (
+    like_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    comment_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (comment_id) REFERENCES comment(comment_id) ON DELETE CASCADE
 );
 
 CREATE TABLE recipe_tag (
