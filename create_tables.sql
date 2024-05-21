@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS user_avatar;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recipe;
 DROP TABLE IF EXISTS favorite;
+DROP TABLE IF EXISTS recipe_rating;
 
 CREATE TABLE user_avatar (
     avatar_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -90,4 +91,15 @@ CREATE TABLE recipe_tag (
     PRIMARY KEY (recipe_id, tag_id),
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tag(tag_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE recipe_rating (
+    rating_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    recipe_id INT,
+    rating TINYINT CHECK (rating BETWEEN 1 AND 5),
+    rating_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
+    UNIQUE (user_id, recipe_id)
 ) ENGINE=InnoDB;
