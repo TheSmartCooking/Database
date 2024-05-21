@@ -7,6 +7,11 @@ DROP TABLE IF EXISTS user_avatar;
 DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recipe;
 
+CREATE TABLE user_avatar (
+    avatar_id INT AUTO_INCREMENT PRIMARY KEY,
+    avatar_path VARCHAR(255) UNIQUE
+) ENGINE=InnoDB;
+
 CREATE TABLE user (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) UNIQUE,
@@ -17,12 +22,7 @@ CREATE TABLE user (
     is_admin BOOLEAN DEFAULT FALSE,
     avatar_id INT,
     FOREIGN KEY (avatar_id) REFERENCES user_avatar(avatar_id) ON DELETE SET NULL
-);
-
-CREATE TABLE user_avatar (
-    avatar_id INT AUTO_INCREMENT PRIMARY KEY,
-    avatar_path VARCHAR(255) UNIQUE
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE recipe (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -51,12 +51,12 @@ CREATE TABLE recipe (
     video_url VARCHAR(255) NULL,
     status ENUM('verified', 'liked', 'hidden', 'banned') NULL,
     FOREIGN KEY (author_id) REFERENCES user(user_id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE tag (
     tag_id INT AUTO_INCREMENT PRIMARY KEY,
     tag_name VARCHAR(255) UNIQUE
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE comment (
     comment_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -66,7 +66,7 @@ CREATE TABLE comment (
     comment_date DATETIME,
     FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE recipe_like (
     like_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -74,7 +74,7 @@ CREATE TABLE recipe_like (
     recipe_id INT,
     FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE comment_like (
     like_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -82,7 +82,7 @@ CREATE TABLE comment_like (
     comment_id INT,
     FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
     FOREIGN KEY (comment_id) REFERENCES comment(comment_id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB;
 
 CREATE TABLE recipe_tag (
     recipe_id INT,
@@ -90,4 +90,4 @@ CREATE TABLE recipe_tag (
     PRIMARY KEY (recipe_id, tag_id),
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     FOREIGN KEY (tag_id) REFERENCES tag(tag_id) ON DELETE CASCADE
-);
+) ENGINE=InnoDB;
