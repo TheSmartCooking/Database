@@ -33,7 +33,7 @@ CREATE TABLE recipe (
     ingredients TEXT,
     preparation TEXT,
     publication_date DATETIME,
-    modification_date DATETIME,
+    modification_date DATETIME NULL,
     image VARCHAR(255) NULL,
     cuisine VARCHAR(255) NULL,
     course VARCHAR(255) NULL,
