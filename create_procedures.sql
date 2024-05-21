@@ -68,7 +68,7 @@ BEGIN
         COALESCE(p_source, NULL),
         COALESCE(p_allergen_information, NULL),
         COALESCE(p_video_url, NULL),
-        COALESCE(status, NULL)
+        NULL
     );
 
     SET p_recipe_id = LAST_INSERT_ID();
