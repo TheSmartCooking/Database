@@ -54,4 +54,12 @@ BEGIN
     ORDER BY c.comment_date DESC;
 END$$
 
+CREATE PROCEDURE GetAllTags()
+BEGIN
+    SELECT 
+        tag_id,
+        tag_name
+    FROM tag;
+END$$
+
 DELIMITER ;
