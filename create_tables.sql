@@ -7,10 +7,11 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS recipe;
 DROP TABLE IF EXISTS favorite;
 DROP TABLE IF EXISTS recipe_rating;
+DROP TABLE IF EXISTS image;
 
-CREATE TABLE user_avatar (
-    avatar_id INT AUTO_INCREMENT PRIMARY KEY,
-    avatar_path VARCHAR(255) UNIQUE
+CREATE TABLE image (
+    image_id INT AUTO_INCREMENT PRIMARY KEY,
+    image_path VARCHAR(255) UNIQUE
 ) ENGINE=InnoDB;
 
 CREATE TABLE user (
@@ -21,8 +22,8 @@ CREATE TABLE user (
     registration_date DATETIME,
     last_login DATETIME,
     is_admin BOOLEAN DEFAULT FALSE,
-    avatar_id INT,
-    FOREIGN KEY (avatar_id) REFERENCES user_avatar(avatar_id) ON DELETE SET NULL
+    avatar_image_id INT,
+    FOREIGN KEY (avatar_image_id) REFERENCES image(image_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE recipe (
@@ -34,7 +35,7 @@ CREATE TABLE recipe (
     preparation TEXT,
     publication_date DATETIME,
     modification_date DATETIME NULL,
-    image VARCHAR(255) NULL,
+    image_id INT NULL,
     cook_time INT NULL,
     difficulty_level VARCHAR(255) NULL,
     rating FLOAT NULL,
@@ -44,7 +45,8 @@ CREATE TABLE recipe (
     allergen_information TEXT NULL,
     video_url VARCHAR(255) NULL,
     status ENUM('verified', 'liked', 'hidden', 'banned') NULL,
-    FOREIGN KEY (author_id) REFERENCES user(user_id) ON DELETE CASCADE
+    FOREIGN KEY (author_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (image_id) REFERENCES image(image_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE tag (
