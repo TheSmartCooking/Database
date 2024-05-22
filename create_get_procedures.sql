@@ -82,7 +82,7 @@ BEGIN
         r.difficulty_level,
         r.status,
         r.rating,
-        i.image_path
+        i.image_path AS image
     FROM recipe r
     JOIN recipe_tag rt ON r.recipe_id = rt.recipe_id
     JOIN tag t ON rt.tag_id = t.tag_id
