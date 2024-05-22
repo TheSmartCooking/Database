@@ -62,4 +62,13 @@ BEGIN
     FROM tag;
 END$$
 
+CREATE PROCEDURE GetTagsForRecipe(IN recipeId INT)
+BEGIN
+    SELECT 
+        t.tag_name
+    FROM tag t
+    JOIN recipe_tag rt ON t.tag_id = rt.tag_id
+    WHERE rt.recipe_id = recipeId;
+END$$
+
 DELIMITER ;
