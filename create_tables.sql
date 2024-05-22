@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS recipe_tag;
 DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS comment_like;
-DROP TABLE IF EXISTS user_avatar;
-DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS person_avatar;
+DROP TABLE IF EXISTS person;
 DROP TABLE IF EXISTS recipe;
 DROP TABLE IF EXISTS favorite;
 DROP TABLE IF EXISTS recipe_rating;
@@ -14,9 +14,9 @@ CREATE TABLE image (
     image_path VARCHAR(255) UNIQUE
 ) ENGINE=InnoDB;
 
-CREATE TABLE user (
-    user_id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) UNIQUE,
+CREATE TABLE person (
+    person_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) UNIQUE,
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     registration_date DATETIME,
@@ -45,7 +45,7 @@ CREATE TABLE recipe (
     allergen_information TEXT NULL,
     video_url VARCHAR(255) NULL,
     status ENUM('verified', 'liked', 'hidden', 'banned') NULL,
-    FOREIGN KEY (author_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (author_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (image_id) REFERENCES image(image_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
@@ -56,28 +56,28 @@ CREATE TABLE tag (
 
 CREATE TABLE comment (
     comment_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    person_id INT,
     recipe_id INT,
     comment TEXT,
     comment_date DATETIME,
-    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE comment_like (
     like_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    person_id INT,
     comment_id INT,
-    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (comment_id) REFERENCES comment(comment_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE favorite (
     favorite_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    person_id INT,
     recipe_id INT,
     favorited_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
@@ -91,11 +91,11 @@ CREATE TABLE recipe_tag (
 
 CREATE TABLE recipe_rating (
     rating_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+    person_id INT,
     recipe_id INT,
     rating TINYINT CHECK (rating BETWEEN 1 AND 5),
     rating_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES user(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
-    UNIQUE (user_id, recipe_id)
+    UNIQUE (person_id, recipe_id)
 ) ENGINE=InnoDB;
