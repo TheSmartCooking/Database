@@ -33,10 +33,10 @@ BEGIN
         r.allergen_information,
         r.video_url,
         r.status,
-        u.username AS author,
+        u.name AS author,
         i.image_path AS image
     FROM recipe r
-    LEFT JOIN user u ON r.author_id = u.user_id
+    LEFT JOIN person u ON r.author_id = u.person_id
     LEFT JOIN image i ON r.image_id = i.image_id
     WHERE r.recipe_id = recipeId;
 END$$
@@ -47,9 +47,9 @@ BEGIN
         c.comment_id,
         c.comment,
         c.comment_date,
-        u.username AS author
+        u.name AS author
     FROM comment c
-    JOIN user u ON c.user_id = u.user_id
+    JOIN person u ON c.person_id = u.person_id
     WHERE c.recipe_id = recipeId
     ORDER BY c.comment_date DESC;
 END$$
