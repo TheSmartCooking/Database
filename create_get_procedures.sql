@@ -41,4 +41,17 @@ BEGIN
     WHERE r.recipe_id = recipeId;
 END$$
 
+CREATE PROCEDURE GetCommentsForRecipe(IN recipeId INT)
+BEGIN
+    SELECT 
+        c.comment_id,
+        c.comment,
+        c.comment_date,
+        u.username AS author
+    FROM comment c
+    JOIN user u ON c.user_id = u.user_id
+    WHERE c.recipe_id = recipeId
+    ORDER BY c.comment_date DESC;
+END$$
+
 DELIMITER ;
