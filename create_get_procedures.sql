@@ -71,4 +71,25 @@ BEGIN
     WHERE rt.recipe_id = recipeId;
 END$$
 
+CREATE PROCEDURE GetRecipesByTags(IN tagList TEXT)
+BEGIN
+    SET @tagList = tagList;
+
+    SELECT 
+        r.recipe_id,
+        r.title,
+        r.cook_time,
+        r.difficulty_level,
+        r.status,
+        r.rating,
+        i.image_path
+    FROM recipe r
+    JOIN recipe_tag rt ON r.recipe_id = rt.recipe_id
+    JOIN tag t ON rt.tag_id = t.tag_id
+    JOIN image i ON r.image_id = i.image_id
+    WHERE FIND_IN_SET(t.tag_id, @tagList) > 0
+    GROUP BY r.recipe_id
+    HAVING COUNT(DISTINCT t.tag_id) = (SELECT COUNT(*) FROM tag WHERE FIND_IN_SET(tag_id, @tagList) > 0);
+END$$
+    
 DELIMITER ;
