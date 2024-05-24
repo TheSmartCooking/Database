@@ -21,6 +21,7 @@ CREATE TABLE person (
     name VARCHAR(255) UNIQUE,
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
+    salt VARBINARY(16),
     registration_date DATETIME,
     last_login DATETIME,
     avatar_image_id INT,
