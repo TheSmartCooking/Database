@@ -3,6 +3,8 @@ DROP TABLE IF EXISTS tag;
 DROP TABLE IF EXISTS comment;
 DROP TABLE IF EXISTS comment_like;
 DROP TABLE IF EXISTS person_avatar;
+DROP TABLE IF EXISTS person_role;
+DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS person;
 DROP TABLE IF EXISTS recipe;
 DROP TABLE IF EXISTS favorite;
@@ -21,9 +23,21 @@ CREATE TABLE person (
     password VARCHAR(255),
     registration_date DATETIME,
     last_login DATETIME,
-    is_admin BOOLEAN DEFAULT FALSE,
     avatar_image_id INT,
     FOREIGN KEY (avatar_image_id) REFERENCES image(image_id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE role (
+    role_id INT AUTO_INCREMENT PRIMARY KEY,
+    role_name VARCHAR(255) UNIQUE
+) ENGINE=InnoDB;
+
+CREATE TABLE person_role (
+    person_id INT,
+    role_id INT,
+    PRIMARY KEY (person_id, role_id),
+    FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
+    FOREIGN KEY (role_id) REFERENCES role(role_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE recipe (
