@@ -51,7 +51,7 @@ CREATE TABLE recipe (
     publication_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modification_date TIMESTAMP NULL,
     image_id INT NULL,
-    cook_time INT NULL,
+    cook_time INT UNSIGNED NULL,
     difficulty_level VARCHAR(255) NULL,
     rating FLOAT NULL,
     number_of_reviews INT NULL,
