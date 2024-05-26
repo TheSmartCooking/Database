@@ -22,8 +22,8 @@ CREATE TABLE person (
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     salt VARBINARY(16),
-    registration_date DATETIME,
-    last_login DATETIME,
+    registration_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_login DATETIME NULL,
     avatar_image_id INT,
     FOREIGN KEY (avatar_image_id) REFERENCES image(image_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
@@ -48,7 +48,7 @@ CREATE TABLE recipe (
     description TEXT,
     ingredients TEXT,
     preparation TEXT,
-    publication_date DATETIME,
+    publication_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     modification_date DATETIME NULL,
     image_id INT NULL,
     cook_time INT NULL,
@@ -74,7 +74,7 @@ CREATE TABLE comment (
     person_id INT,
     recipe_id INT,
     comment TEXT,
-    comment_date DATETIME,
+    comment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
