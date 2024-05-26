@@ -1,15 +1,15 @@
-DROP TABLE IF EXISTS recipe_tag;
-DROP TABLE IF EXISTS tag;
-DROP TABLE IF EXISTS comment;
-DROP TABLE IF EXISTS comment_like;
-DROP TABLE IF EXISTS person_avatar;
-DROP TABLE IF EXISTS person_role;
-DROP TABLE IF EXISTS role;
-DROP TABLE IF EXISTS person;
-DROP TABLE IF EXISTS recipe;
-DROP TABLE IF EXISTS favorite;
-DROP TABLE IF EXISTS recipe_rating;
-DROP TABLE IF EXISTS image;
+DROP TABLE IF EXISTS recipe_tag CASCADE;
+DROP TABLE IF EXISTS tag CASCADE;
+DROP TABLE IF EXISTS comment CASCADE;
+DROP TABLE IF EXISTS comment_like CASCADE;
+DROP TABLE IF EXISTS person_avatar CASCADE;
+DROP TABLE IF EXISTS person_role CASCADE;
+DROP TABLE IF EXISTS role CASCADE;
+DROP TABLE IF EXISTS person CASCADE;
+DROP TABLE IF EXISTS recipe CASCADE;
+DROP TABLE IF EXISTS favorite CASCADE;
+DROP TABLE IF EXISTS recipe_rating CASCADE;
+DROP TABLE IF EXISTS image CASCADE;
 
 CREATE TABLE image (
     image_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -22,8 +22,8 @@ CREATE TABLE person (
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255),
     salt VARBINARY(16),
-    registration_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    last_login DATETIME NULL,
+    registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP NULL,
     avatar_image_id INT,
     FOREIGN KEY (avatar_image_id) REFERENCES image(image_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
@@ -48,8 +48,8 @@ CREATE TABLE recipe (
     description TEXT,
     ingredients TEXT,
     preparation TEXT,
-    publication_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-    modification_date DATETIME NULL,
+    publication_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    modification_date TIMESTAMP NULL,
     image_id INT NULL,
     cook_time INT NULL,
     difficulty_level VARCHAR(255) NULL,
@@ -74,7 +74,7 @@ CREATE TABLE comment (
     person_id INT,
     recipe_id INT,
     comment TEXT,
-    comment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -91,7 +91,7 @@ CREATE TABLE favorite (
     favorite_id INT AUTO_INCREMENT PRIMARY KEY,
     person_id INT,
     recipe_id INT,
-    favorited_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    favorited_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
@@ -109,7 +109,7 @@ CREATE TABLE recipe_rating (
     person_id INT,
     recipe_id INT,
     rating TINYINT CHECK (rating BETWEEN 1 AND 4),
-    rating_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    rating_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     UNIQUE (person_id, recipe_id)
