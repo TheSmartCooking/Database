@@ -1,77 +1,28 @@
 DELIMITER $$
 
-CREATE PROCEDURE create_person(
-    IN p_name VARCHAR(255),
-    IN p_email VARCHAR(255),
-    IN p_password VARCHAR(255),
-    OUT p_person_id INT
+CREATE PROCEDURE create_person (
+    IN p_name VARCHAR(100),
+    IN p_email VARCHAR(100),
+    IN p_password VARBINARY(60),
+    IN p_salt VARBINARY(16)
 )
 BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        SET p_person_id = -1;
-    END;
-
-    INSERT INTO person (name, email, password, registration_date)
-    VALUES (p_name, p_email, p_password, NOW());
-
-    SET p_person_id = LAST_INSERT_ID();
-END$$
-
-CREATE PROCEDURE create_recipe(
-    IN p_author_id INT,
-    IN p_title VARCHAR(255),
-    IN p_description TEXT,
-    IN p_ingredients TEXT,
-    IN p_preparation TEXT,
-    IN p_image VARCHAR(255) NULL,
-    IN p_cook_time INT NULL,
-    IN p_difficulty_level VARCHAR(255) NULL,
-    IN p_nutritional_information TEXT NULL,
-    IN p_source VARCHAR(255) NULL,
-    IN p_allergen_information TEXT NULL,
-    IN p_video_url VARCHAR(255) NULL,
-    OUT p_recipe_id INT
-)
-BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        SET p_recipe_id = -1;
-    END;
-
-    INSERT INTO recipe (
-        author_id,
-        title,
-        description,
-        ingredients,
-        preparation,
-        publication_date,
-        image,
-        cook_time,
-        difficulty_level,
-        nutritional_information,
-        source,
-        allergen_information,
-        video_url,
-        status
-    ) VALUES (
-        p_author_id,
-        p_title,
-        p_description,
-        p_ingredients,
-        p_preparation,
-        NOW(),
-        COALESCE(p_image, NULL),
-        COALESCE(p_cook_time, NULL),
-        COALESCE(p_difficulty_level, NULL),
-        COALESCE(p_nutritional_information, NULL),
-        COALESCE(p_source, NULL),
-        COALESCE(p_allergen_information, NULL),
-        COALESCE(p_video_url, NULL),
-        NULL
-    );
-
-    SET p_recipe_id = LAST_INSERT_ID();
+    DECLARE email_exists INT;
+    
+    -- Check if the email already exists
+    SELECT COUNT(*) INTO email_exists
+    FROM person
+    WHERE email = p_email;
+    
+    IF email_exists = 0 THEN
+        -- Insert the new user if the email does not exist
+        INSERT INTO person (name, email, password, salt)
+        VALUES (p_name, p_email, p_password, p_salt);
+    ELSE
+        -- Signal that the email already exists
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Email already exists';
+    END IF;
 END$$
 
 DELIMITER ;
