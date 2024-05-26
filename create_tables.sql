@@ -18,9 +18,9 @@ CREATE TABLE image (
 
 CREATE TABLE person (
     person_id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) UNIQUE,
-    email VARCHAR(255) UNIQUE,
-    password VARCHAR(255),
+    name VARCHAR(100),
+    email VARCHAR(100) UNIQUE,
+    password VARCHAR(100),
     salt VARBINARY(16),
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,
