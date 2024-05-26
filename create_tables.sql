@@ -25,7 +25,7 @@ CREATE TABLE person (
     salt VARBINARY(16),
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,
-    avatar_image_id INT,
+    avatar_image_id INT NULL,
     FOREIGN KEY (avatar_image_id) REFERENCES image(image_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
