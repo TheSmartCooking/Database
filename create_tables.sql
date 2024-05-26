@@ -5,10 +5,12 @@ DROP TABLE IF EXISTS comment_like CASCADE;
 DROP TABLE IF EXISTS person_responsibility CASCADE;
 DROP TABLE IF EXISTS responsibility CASCADE;
 DROP TABLE IF EXISTS person CASCADE;
+DROP TABLE IF EXISTS recipe_translation CASCADE;
 DROP TABLE IF EXISTS recipe CASCADE;
 DROP TABLE IF EXISTS favorite CASCADE;
 DROP TABLE IF EXISTS recipe_rating CASCADE;
 DROP TABLE IF EXISTS image CASCADE;
+DROP TABLE IF EXISTS locale CASCADE;
 
 CREATE TABLE image (
     image_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -45,13 +47,15 @@ CREATE TABLE status (
     status_name VARCHAR(50) UNIQUE
 ) ENGINE=InnoDB;
 
+CREATE TABLE locale (
+    locale_id INT AUTO_INCREMENT PRIMARY KEY,
+    locale_code VARCHAR(10) UNIQUE,
+    locale_name VARCHAR(50) UNIQUE
+) ENGINE=InnoDB;
+
 CREATE TABLE recipe (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
     author_id INT,
-    title VARCHAR(255),
-    description TEXT,
-    ingredients TEXT,
-    preparation TEXT,
     publication_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modification_date TIMESTAMP NULL,
     image_id INT NULL,
@@ -67,6 +71,18 @@ CREATE TABLE recipe (
     FOREIGN KEY (author_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (image_id) REFERENCES image(image_id) ON DELETE SET NULL,
     FOREIGN KEY (status_id) REFERENCES status(status_id)
+) ENGINE=InnoDB;
+
+CREATE TABLE recipe_translation (
+    recipe_id INT,
+    locale_id INT,
+    title VARCHAR(255),
+    description TEXT,
+    ingredients TEXT,
+    preparation TEXT,
+    PRIMARY KEY (recipe_id, locale_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (locale_id) REFERENCES locale(locale_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE tag (
