@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS recipe_tag CASCADE;
 DROP TABLE IF EXISTS tag CASCADE;
 DROP TABLE IF EXISTS comment CASCADE;
 DROP TABLE IF EXISTS comment_like CASCADE;
-DROP TABLE IF EXISTS person_position CASCADE;
-DROP TABLE IF EXISTS position CASCADE;
+DROP TABLE IF EXISTS person_responsibility CASCADE;
+DROP TABLE IF EXISTS responsibility CASCADE;
 DROP TABLE IF EXISTS person CASCADE;
 DROP TABLE IF EXISTS recipe CASCADE;
 DROP TABLE IF EXISTS favorite CASCADE;
@@ -27,17 +27,17 @@ CREATE TABLE person (
     FOREIGN KEY (avatar_image_id) REFERENCES image(image_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
-CREATE TABLE position (
-    position_id INT AUTO_INCREMENT PRIMARY KEY,
-    position_name VARCHAR(255) UNIQUE
+CREATE TABLE responsibility (
+    responsibility_id INT AUTO_INCREMENT PRIMARY KEY,
+    responsibility_name VARCHAR(255) UNIQUE
 ) ENGINE=InnoDB;
 
-CREATE TABLE person_position (
+CREATE TABLE person_responsibility (
     person_id INT,
-    position_id INT,
-    PRIMARY KEY (person_id, position_id),
+    responsibility_id INT,
+    PRIMARY KEY (person_id, responsibility_id),
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
-    FOREIGN KEY (position_id) REFERENCES position(position_id) ON DELETE CASCADE
+    FOREIGN KEY (responsibility_id) REFERENCES responsibility(responsibility_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE status (
