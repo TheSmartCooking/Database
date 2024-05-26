@@ -52,7 +52,7 @@ CREATE TABLE recipe (
     modification_date TIMESTAMP NULL,
     image_id INT NULL,
     cook_time INT UNSIGNED NULL,
-    difficulty_level VARCHAR(255) NULL,
+    difficulty_level TINYINT CHECK (rating BETWEEN 1 AND 3),
     rating FLOAT NULL,
     number_of_reviews INT NULL,
     nutritional_information TEXT NULL,
