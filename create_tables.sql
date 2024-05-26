@@ -109,7 +109,6 @@ CREATE TABLE recipe_rating (
     person_id INT,
     recipe_id INT,
     rating TINYINT CHECK (rating BETWEEN 1 AND 4),
-    rating_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     UNIQUE (person_id, recipe_id)
