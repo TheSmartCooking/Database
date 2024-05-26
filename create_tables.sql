@@ -40,6 +40,11 @@ CREATE TABLE person_position (
     FOREIGN KEY (position_id) REFERENCES position(position_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
+CREATE TABLE status (
+    status_id INT AUTO_INCREMENT PRIMARY KEY,
+    status_name VARCHAR(50) UNIQUE
+) ENGINE=InnoDB;
+
 CREATE TABLE recipe (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
     author_id INT,
@@ -112,9 +117,4 @@ CREATE TABLE recipe_rating (
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     UNIQUE (person_id, recipe_id)
-) ENGINE=InnoDB;
-
-CREATE TABLE status (
-    status_id INT AUTO_INCREMENT PRIMARY KEY,
-    status_name VARCHAR(50) UNIQUE
 ) ENGINE=InnoDB;
