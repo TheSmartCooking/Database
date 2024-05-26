@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS recipe_tag CASCADE;
 DROP TABLE IF EXISTS tag CASCADE;
 DROP TABLE IF EXISTS comment CASCADE;
 DROP TABLE IF EXISTS comment_like CASCADE;
-DROP TABLE IF EXISTS person_avatar CASCADE;
 DROP TABLE IF EXISTS person_position CASCADE;
 DROP TABLE IF EXISTS position CASCADE;
 DROP TABLE IF EXISTS person CASCADE;
@@ -52,16 +51,17 @@ CREATE TABLE recipe (
     modification_date TIMESTAMP NULL,
     image_id INT NULL,
     cook_time INT UNSIGNED NULL,
-    difficulty_level TINYINT CHECK (rating BETWEEN 1 AND 3),
+    difficulty_level TINYINT CHECK (difficulty_level BETWEEN 1 AND 3),
     rating FLOAT NULL,
     number_of_reviews INT NULL,
     nutritional_information TEXT NULL,
     source VARCHAR(255) NULL,
     allergen_information TEXT NULL,
     video_url VARCHAR(255) NULL,
-    status ENUM('verified', 'liked', 'hidden', 'banned') NULL,
+    status_id INT,
     FOREIGN KEY (author_id) REFERENCES person(person_id) ON DELETE CASCADE,
-    FOREIGN KEY (image_id) REFERENCES image(image_id) ON DELETE SET NULL
+    FOREIGN KEY (image_id) REFERENCES image(image_id) ON DELETE SET NULL,
+    FOREIGN KEY (status_id) REFERENCES status(status_id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE tag (
@@ -112,4 +112,9 @@ CREATE TABLE recipe_rating (
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     UNIQUE (person_id, recipe_id)
+) ENGINE=InnoDB;
+
+CREATE TABLE status (
+    status_id INT AUTO_INCREMENT PRIMARY KEY,
+    status_name VARCHAR(50) UNIQUE
 ) ENGINE=InnoDB;
