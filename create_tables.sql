@@ -31,7 +31,7 @@ CREATE TABLE person (
 
 CREATE TABLE responsibility (
     responsibility_id INT AUTO_INCREMENT PRIMARY KEY,
-    responsibility_name VARCHAR(255) UNIQUE
+    responsibility_name VARCHAR(100) UNIQUE
 ) ENGINE=InnoDB;
 
 CREATE TABLE person_responsibility (
@@ -114,7 +114,8 @@ CREATE TABLE favorite (
     recipe_id INT,
     favorited_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
-    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE
+    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
+    UNIQUE (person_id, recipe_id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE recipe_tag (
