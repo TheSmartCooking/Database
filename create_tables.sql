@@ -11,10 +11,17 @@ DROP TABLE IF EXISTS favorite CASCADE;
 DROP TABLE IF EXISTS recipe_rating CASCADE;
 DROP TABLE IF EXISTS image CASCADE;
 DROP TABLE IF EXISTS locale CASCADE;
+DROP TABLE IF EXISTS status CASCADE;
 
 CREATE TABLE image (
     image_id INT AUTO_INCREMENT PRIMARY KEY,
     image_path VARCHAR(255) UNIQUE
+) ENGINE=InnoDB;
+
+CREATE TABLE locale (
+    locale_id INT AUTO_INCREMENT PRIMARY KEY,
+    locale_code VARCHAR(10) UNIQUE,
+    locale_name VARCHAR(50) UNIQUE
 ) ENGINE=InnoDB;
 
 CREATE TABLE person (
@@ -26,7 +33,9 @@ CREATE TABLE person (
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,
     avatar_image_id INT NULL,
-    FOREIGN KEY (avatar_image_id) REFERENCES image(image_id) ON DELETE SET NULL
+    locale_id INT NULL,
+    FOREIGN KEY (avatar_image_id) REFERENCES image(image_id) ON DELETE SET NULL,
+    FOREIGN KEY (locale_id) REFERENCES locale(locale_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE responsibility (
@@ -45,12 +54,6 @@ CREATE TABLE person_responsibility (
 CREATE TABLE status (
     status_id INT AUTO_INCREMENT PRIMARY KEY,
     status_name VARCHAR(50) UNIQUE
-) ENGINE=InnoDB;
-
-CREATE TABLE locale (
-    locale_id INT AUTO_INCREMENT PRIMARY KEY,
-    locale_code VARCHAR(10) UNIQUE,
-    locale_name VARCHAR(50) UNIQUE
 ) ENGINE=InnoDB;
 
 CREATE TABLE recipe (
