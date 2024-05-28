@@ -12,6 +12,9 @@ DROP TABLE IF EXISTS recipe_rating CASCADE;
 DROP TABLE IF EXISTS image CASCADE;
 DROP TABLE IF EXISTS locale CASCADE;
 DROP TABLE IF EXISTS status CASCADE;
+DROP TABLE IF EXISTS ingredient CASCADE;
+DROP TABLE IF EXISTS recipe_ingredient CASCADE;
+DROP TABLE IF EXISTS ingredient_translation CASCADE;
 
 CREATE TABLE image (
     image_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -74,12 +77,35 @@ CREATE TABLE recipe (
     FOREIGN KEY (status_id) REFERENCES status(status_id)
 ) ENGINE=InnoDB;
 
+CREATE TABLE ingredient (
+    ingredient_id INT AUTO_INCREMENT PRIMARY KEY,
+    default_name VARCHAR(255) UNIQUE
+) ENGINE=InnoDB;
+
+CREATE TABLE ingredient_translation (
+    ingredient_id INT,
+    locale_id INT,
+    translated_name VARCHAR(255),
+    PRIMARY KEY (ingredient_id, locale_id),
+    FOREIGN KEY (ingredient_id) REFERENCES ingredient(ingredient_id) ON DELETE CASCADE,
+    FOREIGN KEY (locale_id) REFERENCES locale(locale_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE recipe_ingredient (
+    recipe_id INT,
+    ingredient_id INT,
+    quantity VARCHAR(50),
+    unit VARCHAR(50),
+    PRIMARY KEY (recipe_id, ingredient_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (ingredient_id) REFERENCES ingredient(ingredient_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
 CREATE TABLE recipe_translation (
     recipe_id INT,
     locale_id INT,
     title VARCHAR(255),
     description TEXT,
-    ingredients TEXT,
     preparation TEXT,
     PRIMARY KEY (recipe_id, locale_id),
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
