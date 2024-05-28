@@ -106,7 +106,8 @@ CREATE TABLE comment_like (
     person_id INT,
     comment_id INT,
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
-    FOREIGN KEY (comment_id) REFERENCES comment(comment_id) ON DELETE CASCADE
+    FOREIGN KEY (comment_id) REFERENCES comment(comment_id) ON DELETE CASCADE,
+    UNIQUE (person_id, comment_id)
 ) ENGINE=InnoDB;
 
 CREATE TABLE favorite (
