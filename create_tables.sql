@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS comment_like CASCADE;
 DROP TABLE IF EXISTS person_responsibility CASCADE;
 DROP TABLE IF EXISTS responsibility CASCADE;
 DROP TABLE IF EXISTS person CASCADE;
+DROP TABLE IF EXISTS person_setting CASCADE;
 DROP TABLE IF EXISTS recipe_translation CASCADE;
 DROP TABLE IF EXISTS recipe CASCADE;
 DROP TABLE IF EXISTS favorite CASCADE;
@@ -39,6 +40,14 @@ CREATE TABLE person (
     locale_id INT NULL,
     FOREIGN KEY (avatar_image_id) REFERENCES image(image_id) ON DELETE SET NULL,
     FOREIGN KEY (locale_id) REFERENCES locale(locale_id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE person_setting (
+    person_id INT,
+    setting_key VARCHAR(100),
+    setting_value VARCHAR(255),
+    PRIMARY KEY (person_id, setting_key),
+    FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE responsibility (
