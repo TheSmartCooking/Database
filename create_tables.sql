@@ -19,13 +19,16 @@ DROP TABLE IF EXISTS ingredient_translation CASCADE;
 
 CREATE TABLE image (
     image_id INT AUTO_INCREMENT PRIMARY KEY,
-    image_path VARCHAR(255) UNIQUE
+    image_path VARCHAR(255) UNIQUE,
+    image_type ENUM('avatar', 'recipe', 'locale_icon') NOT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE locale (
     locale_id INT AUTO_INCREMENT PRIMARY KEY,
     locale_code VARCHAR(10) UNIQUE,
-    locale_name VARCHAR(50) UNIQUE
+    locale_name VARCHAR(50) UNIQUE,
+    icon_image_id INT NULL,
+    FOREIGN KEY (icon_image_id) REFERENCES image(image_id) ON DELETE SET NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE person (
