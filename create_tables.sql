@@ -1,21 +1,21 @@
+DROP TABLE IF EXISTS comment_like CASCADE;
+DROP TABLE IF EXISTS comment CASCADE;
+DROP TABLE IF EXISTS favorite CASCADE;
+DROP TABLE IF EXISTS recipe_rating CASCADE;
 DROP TABLE IF EXISTS recipe_tag CASCADE;
 DROP TABLE IF EXISTS tag CASCADE;
-DROP TABLE IF EXISTS comment CASCADE;
-DROP TABLE IF EXISTS comment_like CASCADE;
+DROP TABLE IF EXISTS recipe_ingredient CASCADE;
+DROP TABLE IF EXISTS ingredient_translation CASCADE;
+DROP TABLE IF EXISTS ingredient CASCADE;
+DROP TABLE IF EXISTS recipe_translation CASCADE;
+DROP TABLE IF EXISTS recipe CASCADE;
+DROP TABLE IF EXISTS person_setting CASCADE;
 DROP TABLE IF EXISTS person_responsibility CASCADE;
 DROP TABLE IF EXISTS responsibility CASCADE;
 DROP TABLE IF EXISTS person CASCADE;
-DROP TABLE IF EXISTS person_setting CASCADE;
-DROP TABLE IF EXISTS recipe_translation CASCADE;
-DROP TABLE IF EXISTS recipe CASCADE;
-DROP TABLE IF EXISTS favorite CASCADE;
-DROP TABLE IF EXISTS recipe_rating CASCADE;
-DROP TABLE IF EXISTS image CASCADE;
-DROP TABLE IF EXISTS locale CASCADE;
 DROP TABLE IF EXISTS status CASCADE;
-DROP TABLE IF EXISTS ingredient CASCADE;
-DROP TABLE IF EXISTS recipe_ingredient CASCADE;
-DROP TABLE IF EXISTS ingredient_translation CASCADE;
+DROP TABLE IF EXISTS locale CASCADE;
+DROP TABLE IF EXISTS image CASCADE;
 
 CREATE TABLE image (
     image_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -29,6 +29,11 @@ CREATE TABLE locale (
     locale_name VARCHAR(50) UNIQUE,
     icon_image_id INT NULL,
     FOREIGN KEY (icon_image_id) REFERENCES image(image_id) ON DELETE SET NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE status (
+    status_id INT AUTO_INCREMENT PRIMARY KEY,
+    status_name VARCHAR(50) UNIQUE
 ) ENGINE=InnoDB;
 
 CREATE TABLE person (
@@ -66,9 +71,18 @@ CREATE TABLE person_responsibility (
     FOREIGN KEY (responsibility_id) REFERENCES responsibility(responsibility_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
-CREATE TABLE status (
-    status_id INT AUTO_INCREMENT PRIMARY KEY,
-    status_name VARCHAR(50) UNIQUE
+CREATE TABLE ingredient (
+    ingredient_id INT AUTO_INCREMENT PRIMARY KEY,
+    default_name VARCHAR(255) UNIQUE
+) ENGINE=InnoDB;
+
+CREATE TABLE ingredient_translation (
+    ingredient_id INT,
+    locale_id INT,
+    translated_name VARCHAR(255),
+    PRIMARY KEY (ingredient_id, locale_id),
+    FOREIGN KEY (ingredient_id) REFERENCES ingredient(ingredient_id) ON DELETE CASCADE,
+    FOREIGN KEY (locale_id) REFERENCES locale(locale_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE recipe (
@@ -89,30 +103,6 @@ CREATE TABLE recipe (
     FOREIGN KEY (status_id) REFERENCES status(status_id)
 ) ENGINE=InnoDB;
 
-CREATE TABLE ingredient (
-    ingredient_id INT AUTO_INCREMENT PRIMARY KEY,
-    default_name VARCHAR(255) UNIQUE
-) ENGINE=InnoDB;
-
-CREATE TABLE ingredient_translation (
-    ingredient_id INT,
-    locale_id INT,
-    translated_name VARCHAR(255),
-    PRIMARY KEY (ingredient_id, locale_id),
-    FOREIGN KEY (ingredient_id) REFERENCES ingredient(ingredient_id) ON DELETE CASCADE,
-    FOREIGN KEY (locale_id) REFERENCES locale(locale_id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
-CREATE TABLE recipe_ingredient (
-    recipe_id INT,
-    ingredient_id INT,
-    quantity VARCHAR(50),
-    unit VARCHAR(50),
-    PRIMARY KEY (recipe_id, ingredient_id),
-    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
-    FOREIGN KEY (ingredient_id) REFERENCES ingredient(ingredient_id) ON DELETE CASCADE
-) ENGINE=InnoDB;
-
 CREATE TABLE recipe_translation (
     recipe_id INT,
     locale_id INT,
@@ -127,6 +117,24 @@ CREATE TABLE recipe_translation (
 CREATE TABLE tag (
     tag_id INT AUTO_INCREMENT PRIMARY KEY,
     tag_name VARCHAR(255) UNIQUE
+) ENGINE=InnoDB;
+
+CREATE TABLE recipe_ingredient (
+    recipe_id INT,
+    ingredient_id INT,
+    quantity VARCHAR(50),
+    unit VARCHAR(50),
+    PRIMARY KEY (recipe_id, ingredient_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (ingredient_id) REFERENCES ingredient(ingredient_id) ON DELETE CASCADE
+) ENGINE=InnoDB;
+
+CREATE TABLE recipe_tag (
+    recipe_id INT,
+    tag_id INT,
+    PRIMARY KEY (recipe_id, tag_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tag(tag_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE comment (
@@ -156,14 +164,6 @@ CREATE TABLE favorite (
     FOREIGN KEY (person_id) REFERENCES person(person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
     UNIQUE (person_id, recipe_id)
-) ENGINE=InnoDB;
-
-CREATE TABLE recipe_tag (
-    recipe_id INT,
-    tag_id INT,
-    PRIMARY KEY (recipe_id, tag_id),
-    FOREIGN KEY (recipe_id) REFERENCES recipe(recipe_id) ON DELETE CASCADE,
-    FOREIGN KEY (tag_id) REFERENCES tag(tag_id) ON DELETE CASCADE
 ) ENGINE=InnoDB;
 
 CREATE TABLE recipe_rating (
