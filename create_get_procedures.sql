@@ -1,12 +1,29 @@
 DROP PROCEDURE IF EXISTS get_paginated_recipes;
 DROP PROCEDURE IF EXISTS get_person_by_id;
 DROP PROCEDURE IF EXISTS get_recipe_by_id;
-DROP PROCEDURE IF EXISTS get_ingredient_by_id;
 DROP PROCEDURE IF EXISTS get_comments_by_recipe_id;
 DROP PROCEDURE IF EXISTS get_paginated_tags;
 DROP PROCEDURE IF EXISTS get_tags_by_recipe_id;
 DROP PROCEDURE IF EXISTS get_recipes_by_author;
-DROP PROCEDURE IF EXISTS get_recipes_by_tag;
+DROP PROCEDURE IF EXISTS get_comments_by_person;
+DROP PROCEDURE IF EXISTS get_recipes_by_tags;
+DROP PROCEDURE IF EXISTS get_recipe_ingredients_by_recipe_id;
+DROP PROCEDURE IF EXISTS get_recipe_translations_by_recipe_id;
+DROP PROCEDURE IF EXISTS get_all_locales;
+DROP PROCEDURE IF EXISTS get_all_statuses;
+DROP PROCEDURE IF EXISTS get_favorites_by_person_id;
+DROP PROCEDURE IF EXISTS get_ratings_by_recipe_id;
+DROP PROCEDURE IF EXISTS get_recipe_ids_by_ingredient;
+DROP PROCEDURE IF EXISTS get_recent_recipes;
+DROP PROCEDURE IF EXISTS get_popular_recipes;
+DROP PROCEDURE IF EXISTS get_recipe_count_by_tag;
+DROP PROCEDURE IF EXISTS get_recipe_count_by_author;
+DROP PROCEDURE IF EXISTS get_recipes_by_status;
+DROP PROCEDURE IF EXISTS get_person_responsibilities_by_person_id;
+DROP PROCEDURE IF EXISTS get_ingredient_translations_by_ingredient_id;
+DROP PROCEDURE IF EXISTS get_person_settings_by_person_id;
+DROP PROCEDURE IF EXISTS get_images_by_type;
+DROP PROCEDURE IF EXISTS get_responsibilities;
 
 DELIMITER $$
 
@@ -17,15 +34,13 @@ CREATE PROCEDURE get_paginated_recipes(
     IN p_page_size INT
 )
 BEGIN
-    DECLARE v_offset INT;
-    SET v_offset = (p_page - 1) * p_page_size;
+    DECLARE v_offset INT DEFAULT (p_page - 1) * p_page_size;
 
     SELECT 
         r.recipe_id,
         rt.title,
         r.cook_time,
         r.difficulty_level,
-        r.rating,
         i.image_path AS image
     FROM 
         recipe r
@@ -56,15 +71,22 @@ BEGIN
         p.last_login,
         i.image_path AS avatar,
         l.locale_code,
-        l.locale_name
+        l.locale_name,
+        GROUP_CONCAT(r.responsibility_name) AS responsibilities
     FROM 
         person p
     LEFT JOIN 
         image i ON p.avatar_image_id = i.image_id
     LEFT JOIN 
         locale l ON p.locale_id = l.locale_id
+    LEFT JOIN 
+        person_responsibility pr ON p.person_id = pr.person_id
+    LEFT JOIN 
+        responsibility r ON pr.responsibility_id = r.responsibility_id
     WHERE 
-        p.person_id = p_person_id;
+        p.person_id = p_person_id
+    GROUP BY 
+        p.person_id;
 END$$
 
 CREATE PROCEDURE get_recipe_by_id(
@@ -103,34 +125,13 @@ BEGIN
         r.recipe_id = p_recipe_id;
 END$$
 
-CREATE PROCEDURE get_ingredient_by_id(
-    IN p_ingredient_id INT
-)
-BEGIN
-    SELECT 
-        i.ingredient_id,
-        i.default_name,
-        it.translated_name,
-        l.locale_code,
-        l.locale_name
-    FROM 
-        ingredient i
-    LEFT JOIN 
-        ingredient_translation it ON i.ingredient_id = it.ingredient_id
-    LEFT JOIN 
-        locale l ON it.locale_id = l.locale_id
-    WHERE 
-        i.ingredient_id = p_ingredient_id;
-END$$
-
 CREATE PROCEDURE get_comments_by_recipe_id(
     IN p_recipe_id INT,
     IN p_page INT,
     IN p_page_size INT
 )
 BEGIN
-    DECLARE v_offset INT;
-    SET v_offset = (p_page - 1) * p_page_size;
+    DECLARE v_offset INT DEFAULT (p_page - 1) * p_page_size;
 
     SELECT 
         c.comment_id,
@@ -159,8 +160,7 @@ CREATE PROCEDURE get_paginated_tags(
     IN p_page_size INT
 )
 BEGIN
-    DECLARE v_offset INT;
-    SET v_offset = (p_page - 1) * p_page_size;
+    DECLARE v_offset INT DEFAULT (p_page - 1) * p_page_size;
 
     SELECT 
         t.tag_id,
@@ -192,15 +192,13 @@ CREATE PROCEDURE get_recipes_by_author(
     IN p_page_size INT
 )
 BEGIN
-    DECLARE v_offset INT;
-    SET v_offset = (p_page - 1) * p_page_size;
+    DECLARE v_offset INT DEFAULT (p_page - 1) * p_page_size;
 
     SELECT 
         r.recipe_id,
         rt.title,
         r.cook_time,
         r.difficulty_level,
-        r.rating,
         i.image_path AS image
     FROM 
         recipe r
@@ -220,8 +218,7 @@ CREATE PROCEDURE get_comments_by_person(
     IN p_page_size INT
 )
 BEGIN
-    DECLARE v_offset INT;
-    SET v_offset = (p_page - 1) * p_page_size;
+    DECLARE v_offset INT DEFAULT (p_page - 1) * p_page_size;
 
     SELECT 
         c.comment_id,
@@ -241,36 +238,139 @@ BEGIN
         v_offset, p_page_size;
 END$$
 
-CREATE PROCEDURE get_recipes_by_tag(
-    IN p_tag_id INT,
+CREATE PROCEDURE get_recipes_by_tags(
+    IN p_tag_ids VARCHAR(255),
     IN p_page INT,
     IN p_page_size INT
 )
 BEGIN
-    DECLARE v_offset INT;
-    SET v_offset = (p_page - 1) * p_page_size;
+    DECLARE v_offset INT DEFAULT (p_page - 1) * p_page_size;
+    SET @query = CONCAT(
+        'SELECT r.recipe_id, rt.title, r.cook_time, r.difficulty_level, i.image_path AS image ',
+        'FROM recipe r ',
+        'INNER JOIN recipe_tag rtg ON r.recipe_id = rtg.recipe_id ',
+        'INNER JOIN tag t ON t.tag_id = rtg.tag_id ',
+        'LEFT JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id ',
+        'LEFT JOIN image i ON r.image_id = i.image_id ',
+        'WHERE t.tag_id IN (', p_tag_ids, ') ',
+        'LIMIT ', v_offset, ', ', p_page_size
+    );
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+END$$
 
+CREATE PROCEDURE get_recipe_ingredients_by_recipe_id(
+    IN p_recipe_id INT
+)
+BEGIN
     SELECT 
+        ri.ingredient_id,
+        i.default_name,
+        ri.quantity,
+        ri.unit
+    FROM 
+        recipe_ingredient ri
+    INNER JOIN 
+        ingredient i ON ri.ingredient_id = i.ingredient_id
+    WHERE 
+        ri.recipe_id = p_recipe_id;
+END$$
+
+CREATE PROCEDURE get_recipe_translations_by_recipe_id(
+    IN p_recipe_id INT
+)
+BEGIN
+    SELECT 
+        rt.locale_id,
+        l.locale_code,
+        l.locale_name,
+        rt.title,
+        rt.description,
+        rt.preparation
+    FROM 
+        recipe_translation rt
+    INNER JOIN 
+        locale l ON rt.locale_id = l.locale_id
+    WHERE 
+        rt.recipe_id = p_recipe_id;
+END$$
+
+CREATE PROCEDURE get_all_locales()
+BEGIN
+    SELECT 
+        l.locale_id,
+        l.locale_code,
+        l.locale_name,
+        i.image_path AS icon
+    FROM 
+        locale l
+    LEFT JOIN 
+        image i ON l.icon_image_id = i.image_id;
+END$$
+
+CREATE PROCEDURE get_all_statuses()
+BEGIN
+    SELECT 
+        status_id,
+        status_name
+    FROM 
+        status;
+END$$
+
+CREATE PROCEDURE get_favorites_by_person_id(
+    IN p_person_id INT
+)
+BEGIN
+    SELECT 
+        f.favorite_id,
         r.recipe_id,
         rt.title,
         r.cook_time,
         r.difficulty_level,
-        r.rating,
-        i.image_path AS image
+        i.image_path AS image,
+        f.favorited_date
     FROM 
-        recipe r
+        favorite f
     INNER JOIN 
-        recipe_tag rtg ON r.recipe_id = rtg.recipe_id
-    INNER JOIN 
-        tag t ON t.tag_id = rtg.tag_id
+        recipe r ON f.recipe_id = r.recipe_id
     LEFT JOIN 
         recipe_translation rt ON r.recipe_id = rt.recipe_id
     LEFT JOIN 
         image i ON r.image_id = i.image_id
     WHERE 
-        t.tag_id = p_tag_id
-    LIMIT 
-        v_offset, p_page_size;
+        f.person_id = p_person_id;
+END$$
+
+CREATE PROCEDURE get_ratings_by_recipe_id(
+    IN p_recipe_id INT
+)
+BEGIN
+    SELECT 
+        rr.rating_id,
+        rr.person_id,
+        rr.rating,
+        p.name AS person_name
+    FROM 
+        recipe_rating rr
+    INNER JOIN 
+        person p ON rr.person_id = p.person_id
+    WHERE 
+        rr.recipe_id = p_recipe_id;
+END$$
+
+CREATE PROCEDURE get_recipe_ids_by_ingredient(
+    IN p_ingredient_ids VARCHAR(255)
+)
+BEGIN
+    SET @query = CONCAT(
+        'SELECT DISTINCT ri.recipe_id ',
+        'FROM recipe_ingredient ri ',
+        'WHERE ri.ingredient_id IN (', p_ingredient_ids, ')'
+    );
+    PREPARE stmt FROM @query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
 END$$
 
 DELIMITER ;
