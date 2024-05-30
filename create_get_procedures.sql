@@ -4,6 +4,7 @@ DROP PROCEDURE IF EXISTS get_recipe_by_id;
 DROP PROCEDURE IF EXISTS get_ingredient_by_id;
 DROP PROCEDURE IF EXISTS get_comments_by_recipe_id;
 DROP PROCEDURE IF EXISTS get_paginated_tags;
+DROP PROCEDURE IF EXISTS get_tags_by_recipe_id;
 
 DELIMITER $$
 
@@ -166,6 +167,21 @@ BEGIN
         tag t
     LIMIT 
         v_offset, p_page_size;
+END$$
+
+CREATE PROCEDURE get_tags_by_recipe_id(
+    IN p_recipe_id INT
+)
+BEGIN
+    SELECT 
+        t.tag_id,
+        t.tag_name
+    FROM 
+        tag t
+    INNER JOIN 
+        recipe_tag rt ON t.tag_id = rt.tag_id
+    WHERE 
+        rt.recipe_id = p_recipe_id;
 END$$
 
 DELIMITER ;
