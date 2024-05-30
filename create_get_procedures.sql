@@ -2,7 +2,7 @@ DROP PROCEDURE IF EXISTS get_paginated_recipes;
 DROP PROCEDURE IF EXISTS get_person_by_id;
 DROP PROCEDURE IF EXISTS get_recipe_by_id;
 DROP PROCEDURE IF EXISTS get_ingredient_by_id;
-DROP PROCEDURE IF EXISTS get_comment_by_id;
+DROP PROCEDURE IF EXISTS get_comments_by_recipe_id;
 DROP PROCEDURE IF EXISTS get_tag_by_id;
 
 DELIMITER $$
@@ -120,16 +120,21 @@ BEGIN
         i.ingredient_id = p_ingredient_id;
 END$$
 
-CREATE PROCEDURE get_comment_by_id(
-    IN p_comment_id INT
+CREATE PROCEDURE get_comments_by_recipe_id(
+    IN p_recipe_id INT,
+    IN p_page INT,
+    IN p_page_size INT
 )
 BEGIN
+    DECLARE v_offset INT;
+    SET v_offset = (p_page - 1) * p_page_size;
+
     SELECT 
         c.comment_id,
         c.comment,
         c.comment_date,
+        p.person_id,
         p.name AS person_name,
-        p.person_id AS person_id,
         r.recipe_id,
         rt.title AS recipe_title
     FROM 
@@ -141,7 +146,9 @@ BEGIN
     LEFT JOIN 
         recipe_translation rt ON r.recipe_id = rt.recipe_id
     WHERE 
-        c.comment_id = p_comment_id;
+        c.recipe_id = p_recipe_id
+    LIMIT 
+        v_offset, p_page_size;
 END$$
 
 CREATE PROCEDURE get_tag_by_id(
