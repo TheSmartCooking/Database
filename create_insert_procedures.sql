@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS create_person;
+
 DELIMITER $$
 
 CREATE PROCEDURE create_person (
