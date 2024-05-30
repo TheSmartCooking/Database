@@ -5,6 +5,8 @@ DROP PROCEDURE IF EXISTS get_ingredient_by_id;
 DROP PROCEDURE IF EXISTS get_comments_by_recipe_id;
 DROP PROCEDURE IF EXISTS get_paginated_tags;
 DROP PROCEDURE IF EXISTS get_tags_by_recipe_id;
+DROP PROCEDURE IF EXISTS get_recipes_by_author;
+DROP PROCEDURE IF EXISTS get_recipes_by_tag;
 
 DELIMITER $$
 
@@ -182,6 +184,93 @@ BEGIN
         recipe_tag rt ON t.tag_id = rt.tag_id
     WHERE 
         rt.recipe_id = p_recipe_id;
+END$$
+
+CREATE PROCEDURE get_recipes_by_author(
+    IN p_author_id INT,
+    IN p_page INT,
+    IN p_page_size INT
+)
+BEGIN
+    DECLARE v_offset INT;
+    SET v_offset = (p_page - 1) * p_page_size;
+
+    SELECT 
+        r.recipe_id,
+        rt.title,
+        r.cook_time,
+        r.difficulty_level,
+        r.rating,
+        i.image_path AS image
+    FROM 
+        recipe r
+    LEFT JOIN 
+        recipe_translation rt ON r.recipe_id = rt.recipe_id
+    LEFT JOIN 
+        image i ON r.image_id = i.image_id
+    WHERE 
+        r.author_id = p_author_id
+    LIMIT 
+        v_offset, p_page_size;
+END$$
+
+CREATE PROCEDURE get_comments_by_person(
+    IN p_person_id INT,
+    IN p_page INT,
+    IN p_page_size INT
+)
+BEGIN
+    DECLARE v_offset INT;
+    SET v_offset = (p_page - 1) * p_page_size;
+
+    SELECT 
+        c.comment_id,
+        c.comment,
+        c.comment_date,
+        r.recipe_id,
+        rt.title AS recipe_title
+    FROM 
+        comment c
+    LEFT JOIN 
+        recipe r ON c.recipe_id = r.recipe_id
+    LEFT JOIN 
+        recipe_translation rt ON r.recipe_id = rt.recipe_id
+    WHERE 
+        c.person_id = p_person_id
+    LIMIT 
+        v_offset, p_page_size;
+END$$
+
+CREATE PROCEDURE get_recipes_by_tag(
+    IN p_tag_id INT,
+    IN p_page INT,
+    IN p_page_size INT
+)
+BEGIN
+    DECLARE v_offset INT;
+    SET v_offset = (p_page - 1) * p_page_size;
+
+    SELECT 
+        r.recipe_id,
+        rt.title,
+        r.cook_time,
+        r.difficulty_level,
+        r.rating,
+        i.image_path AS image
+    FROM 
+        recipe r
+    INNER JOIN 
+        recipe_tag rtg ON r.recipe_id = rtg.recipe_id
+    INNER JOIN 
+        tag t ON t.tag_id = rtg.tag_id
+    LEFT JOIN 
+        recipe_translation rt ON r.recipe_id = rt.recipe_id
+    LEFT JOIN 
+        image i ON r.image_id = i.image_id
+    WHERE 
+        t.tag_id = p_tag_id
+    LIMIT 
+        v_offset, p_page_size;
 END$$
 
 DELIMITER ;
