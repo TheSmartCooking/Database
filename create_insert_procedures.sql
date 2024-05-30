@@ -5,6 +5,12 @@ DROP PROCEDURE IF EXISTS create_responsibility;
 DROP PROCEDURE IF EXISTS create_status;
 DROP PROCEDURE IF EXISTS create_ingredient;
 DROP PROCEDURE IF EXISTS create_tag;
+DROP PROCEDURE IF EXISTS create_recipe;
+DROP PROCEDURE IF EXISTS create_comment;
+DROP PROCEDURE IF EXISTS create_comment_like;
+DROP PROCEDURE IF EXISTS create_favorite;
+DROP PROCEDURE IF EXISTS create_recipe_tag;
+DROP PROCEDURE IF EXISTS create_recipe_rating;
 
 DELIMITER $$
 
@@ -152,6 +158,68 @@ BEGIN
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Tag name already exists';
     END IF;
+END$$
+
+CREATE PROCEDURE create_recipe (
+    IN p_author_id INT,
+    IN p_image_id INT,
+    IN p_cook_time INT UNSIGNED,
+    IN p_difficulty_level TINYINT,
+    IN p_nutritional_information TEXT,
+    IN p_source VARCHAR(255),
+    IN p_video_url VARCHAR(255),
+    IN p_status_id INT
+)
+BEGIN
+    INSERT INTO recipe (author_id, image_id, cook_time, difficulty_level, nutritional_information, source, video_url, status_id)
+    VALUES (p_author_id, p_image_id, p_cook_time, p_difficulty_level, p_nutritional_information, p_source, p_video_url, p_status_id);
+END$$
+
+CREATE PROCEDURE create_comment (
+    IN p_person_id INT,
+    IN p_recipe_id INT,
+    IN p_comment TEXT
+)
+BEGIN
+    INSERT INTO comment (person_id, recipe_id, comment)
+    VALUES (p_person_id, p_recipe_id, p_comment);
+END$$
+
+CREATE PROCEDURE create_comment_like (
+    IN p_person_id INT,
+    IN p_comment_id INT
+)
+BEGIN
+    INSERT INTO comment_like (person_id, comment_id)
+    VALUES (p_person_id, p_comment_id);
+END$$
+
+CREATE PROCEDURE create_favorite (
+    IN p_person_id INT,
+    IN p_recipe_id INT
+)
+BEGIN
+    INSERT INTO favorite (person_id, recipe_id)
+    VALUES (p_person_id, p_recipe_id);
+END$$
+
+CREATE PROCEDURE create_recipe_tag (
+    IN p_recipe_id INT,
+    IN p_tag_id INT
+)
+BEGIN
+    INSERT INTO recipe_tag (recipe_id, tag_id)
+    VALUES (p_recipe_id, p_tag_id);
+END$$
+
+CREATE PROCEDURE create_recipe_rating (
+    IN p_person_id INT,
+    IN p_recipe_id INT,
+    IN p_rating TINYINT
+)
+BEGIN
+    INSERT INTO recipe_rating (person_id, recipe_id, rating)
+    VALUES (p_person_id, p_recipe_id, p_rating);
 END$$
 
 DELIMITER ;
