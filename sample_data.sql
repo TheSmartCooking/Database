@@ -31,8 +31,8 @@ CALL create_tag('Dessert');
 CALL create_tag('Vegan');
 
 -- Create sample recipes
-CALL create_recipe(1, 2, 30, 2, 'Calories: 200', 'Grandma\'s Recipe Book', 'http://example.com/video', 2);
-CALL create_recipe(2, NULL, 45, 3, 'Calories: 150', 'Chef\'s Special', 'http://example.com/video', 2);
+CALL create_recipe(1, 2, 30, 2, 'Calories: 200', 'Grandma''s Recipe Book', 'http://example.com/video', 2);
+CALL create_recipe(2, NULL, 45, 3, 'Calories: 150', 'Chef''s Special', 'http://example.com/video', 2);
 
 -- Create sample comments
 CALL create_comment(1, 1, 'This recipe is amazing!');
