@@ -84,6 +84,7 @@ BEGIN
         rt.title,
         rt.description,
         rt.preparation,
+        p.person_id AS author_id,
         p.name AS author_name
     FROM 
         recipe r
@@ -128,6 +129,7 @@ BEGIN
         c.comment,
         c.comment_date,
         p.name AS person_name,
+        p.person_id AS person_id,
         r.recipe_id,
         rt.title AS recipe_title
     FROM 
