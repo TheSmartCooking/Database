@@ -31,8 +31,6 @@ BEGIN
     END IF;
 END$$
 
-DELIMITER ;
-
 CREATE PROCEDURE create_image (
     IN p_image_path VARCHAR(255),
     IN p_image_type ENUM('avatar', 'recipe', 'locale_icon')
