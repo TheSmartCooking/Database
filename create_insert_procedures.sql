@@ -17,7 +17,7 @@ DELIMITER $$
 CREATE PROCEDURE create_person (
     IN p_name VARCHAR(100),
     IN p_email VARCHAR(100),
-    IN p_password VARBINARY(60),
+    IN p_password VARCHAR(100),
     IN p_salt VARBINARY(16)
 )
 BEGIN
