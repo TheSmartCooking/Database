@@ -27,6 +27,26 @@ DROP PROCEDURE IF EXISTS get_responsibilities;
 
 DELIMITER $$
 
+CREATE PROCEDURE get_locale(
+    IN p_locale_code VARCHAR(10),
+    OUT p_locale_id INT
+)
+BEGIN
+    DECLARE v_locale_id INT;
+
+    SELECT locale_id INTO v_locale_id
+    FROM locale
+    WHERE locale_code = p_locale_code;
+
+    IF v_locale_id IS NULL THEN
+        SELECT locale_id INTO v_locale_id
+        FROM locale
+        WHERE locale_code = 'en_US';
+    END IF;
+
+    SET p_locale_id = v_locale_id;
+END$$
+
 CREATE PROCEDURE get_paginated_recipes(
     IN p_locale_code VARCHAR(10),
     IN p_status_name VARCHAR(50),
@@ -37,14 +57,17 @@ CREATE PROCEDURE get_paginated_recipes(
 )
 BEGIN
     DECLARE v_offset INT DEFAULT (p_page - 1) * p_page_size;
+    DECLARE v_locale_id INT;
+
+    CALL get_locale(p_locale_code, v_locale_id);
 
     -- Conditional logic to call appropriate procedure based on sorting criteria
     IF p_sort_by = 'most_recent' THEN
-        CALL get_recipes_by_newness(p_locale_code, p_status_name, v_offset, p_page_size);
+        CALL get_recipes_by_newness(v_locale_id, p_status_name, v_offset, p_page_size);
     ELSEIF p_sort_by = 'most_popular' THEN
-        CALL get_recipes_by_popularity(p_locale_code, p_status_name, v_offset, p_page_size);
+        CALL get_recipes_by_popularity(v_locale_id, p_status_name, v_offset, p_page_size);
     ELSEIF p_sort_by = 'by_tags' THEN
-        CALL get_recipes_by_tags(p_tag_ids, p_locale_code, p_status_name, v_offset, p_page_size);
+        CALL get_recipes_by_tags(p_tag_ids, v_locale_id, p_status_name, v_offset, p_page_size);
     ELSE
         SELECT 
             r.recipe_id,
@@ -63,7 +86,7 @@ BEGIN
         LEFT JOIN 
             image i ON r.image_id = i.image_id
         WHERE 
-            l.locale_code = p_locale_code
+            l.locale_id = v_locale_id
             AND s.status_name = p_status_name
         LIMIT 
             v_offset, p_page_size;
