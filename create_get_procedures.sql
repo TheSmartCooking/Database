@@ -77,12 +77,9 @@ BEGIN
     SELECT 
         p.person_id,
         p.name,
-        p.email,
         p.registration_date,
-        p.last_login,
         i.image_path AS avatar,
-        l.locale_code,
-        l.locale_name,
+        l.locale_id,
         GROUP_CONCAT(r.responsibility_name) AS responsibilities
     FROM 
         person p
