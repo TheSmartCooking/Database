@@ -272,7 +272,7 @@ END$$
 
 CREATE PROCEDURE get_recipes_by_tags(
     IN p_tag_ids VARCHAR(255),
-    IN p_locale_code VARCHAR(10),
+    IN p_locale_id INT,
     IN p_status_name VARCHAR(50),
     IN p_offset INT,
     IN p_page_size INT
@@ -288,7 +288,7 @@ BEGIN
         'INNER JOIN locale l ON rt.locale_id = l.locale_id ',
         'INNER JOIN status s ON r.status_id = s.status_id ',
         'WHERE t.tag_id IN (', p_tag_ids, ') ',
-        'AND l.locale_code = \'', p_locale_code, '\' ',
+        'AND l.locale_id = \'', p_locale_id, '\' ',
         'AND s.status_name = \'', p_status_name, '\' ',
         'LIMIT ', p_offset, ', ', p_page_size
     );
@@ -298,7 +298,7 @@ BEGIN
 END$$
 
 CREATE PROCEDURE get_recipes_by_newness(
-    IN p_locale_code VARCHAR(10),
+    IN p_locale_id INT,
     IN p_status_name VARCHAR(50),
     IN p_offset INT,
     IN p_page_size INT
@@ -321,7 +321,7 @@ BEGIN
     LEFT JOIN 
         image i ON r.image_id = i.image_id
     WHERE 
-        l.locale_code = p_locale_code
+        l.locale_id = p_locale_id
         AND s.status_name = p_status_name
     ORDER BY 
         r.publication_date DESC
@@ -330,7 +330,7 @@ BEGIN
 END$$
 
 CREATE PROCEDURE get_recipes_by_popularity(
-    IN p_locale_code VARCHAR(10),
+    IN p_locale_id INT,
     IN p_status_name VARCHAR(50),
     IN p_offset INT,
     IN p_page_size INT
@@ -353,7 +353,7 @@ BEGIN
     LEFT JOIN 
         image i ON r.image_id = i.image_id
     WHERE 
-        l.locale_code = p_locale_code
+        l.locale_id = p_locale_id
         AND s.status_name = p_status_name
     ORDER BY 
         r.number_of_reviews DESC
