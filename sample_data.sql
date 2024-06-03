@@ -53,18 +53,18 @@ CALL create_recipe_rating(2, 2, 3);
 
 -- Create sample locales
 CALL create_locale('fr_FR', 'French (France)', 1);
-CALL create_locale('en_US', 'English (United States)', 2);
-CALL create_locale('es_ES', 'Spanish (Spain)', 3);
-CALL create_locale('de_DE', 'German (Germany)', 4);
-CALL create_locale('it_IT', 'Italian (Italy)', 5);
-CALL create_locale('pt_PT', 'Portuguese (Portugal)', 6);
-CALL create_locale('pt_BR', 'Portuguese (Brazil)', 7);
-CALL create_locale('zh_CN', 'Chinese (Simplified)', 8);
-CALL create_locale('ja_JP', 'Japanese (Japan)', 9);
-CALL create_locale('ko_KR', 'Korean (South Korea)', 10);
-CALL create_locale('ru_RU', 'Russian (Russia)', 11);
-CALL create_locale('ar_SA', 'Arabic (Saudi Arabia)', 12);
-CALL create_locale('hi_IN', 'Hindi (India)', 13);
+CALL create_locale('en_US', 'English (United States)', 1);
+CALL create_locale('es_ES', 'Spanish (Spain)', 1);
+CALL create_locale('de_DE', 'German (Germany)', 1);
+CALL create_locale('it_IT', 'Italian (Italy)', 1);
+CALL create_locale('pt_PT', 'Portuguese (Portugal)', 1);
+CALL create_locale('pt_BR', 'Portuguese (Brazil)', 1);
+CALL create_locale('zh_CN', 'Chinese (Simplified)', 1);
+CALL create_locale('ja_JP', 'Japanese (Japan)', 1);
+CALL create_locale('ko_KR', 'Korean (South Korea)', 1);
+CALL create_locale('ru_RU', 'Russian (Russia)', 1);
+CALL create_locale('ar_SA', 'Arabic (Saudi Arabia)', 1);
+CALL create_locale('hi_IN', 'Hindi (India)', 1);
 
 -- Create sample recipe translations
 
