@@ -53,3 +53,18 @@ CALL create_recipe_tag(2, 2);
 -- Create sample recipe ratings
 CALL create_recipe_rating(1, 1, 4);
 CALL create_recipe_rating(2, 2, 3);
+
+-- Create locales
+CALL create_locale('fr_FR', 'French (France)', 1);
+CALL create_locale('en_US', 'English (United States)', 2);
+CALL create_locale('es_ES', 'Spanish (Spain)', 3);
+CALL create_locale('de_DE', 'German (Germany)', 4);
+CALL create_locale('it_IT', 'Italian (Italy)', 5);
+CALL create_locale('pt_PT', 'Portuguese (Portugal)', 6);
+CALL create_locale('pt_BR', 'Portuguese (Brazil)', 7);
+CALL create_locale('zh_CN', 'Chinese (Simplified)', 8);
+CALL create_locale('ja_JP', 'Japanese (Japan)', 9);
+CALL create_locale('ko_KR', 'Korean (South Korea)', 10);
+CALL create_locale('ru_RU', 'Russian (Russia)', 11);
+CALL create_locale('ar_SA', 'Arabic (Saudi Arabia)', 12);
+CALL create_locale('hi_IN', 'Hindi (India)', 13);
