@@ -54,7 +54,7 @@ CALL create_recipe_tag(2, 2);
 CALL create_recipe_rating(1, 1, 4);
 CALL create_recipe_rating(2, 2, 3);
 
--- Create locales
+-- Create sample locales
 CALL create_locale('fr_FR', 'French (France)', 1);
 CALL create_locale('en_US', 'English (United States)', 2);
 CALL create_locale('es_ES', 'Spanish (Spain)', 3);
@@ -68,3 +68,16 @@ CALL create_locale('ko_KR', 'Korean (South Korea)', 10);
 CALL create_locale('ru_RU', 'Russian (Russia)', 11);
 CALL create_locale('ar_SA', 'Arabic (Saudi Arabia)', 12);
 CALL create_locale('hi_IN', 'Hindi (India)', 13);
+
+-- Create sample recipe translations
+
+INSERT INTO recipe_translation (recipe_id, locale_id, title, description, preparation) VALUES
+(1, 1, 'Pancakes Classiques', 'Des pancakes moelleux et délicieux', 'Mélanger la farine, le lait, les œufs et la levure chimique. Cuire sur une plaque chauffante.'),
+(1, 2, 'Classic Pancakes', 'Fluffy and delicious pancakes', 'Mix flour, milk, eggs, and baking powder. Cook on a hot griddle.'),
+(1, 3, 'Panqueques Clásicos', 'Panqueques esponjosos y deliciosos', 'Mezclar harina, leche, huevos y polvo de hornear. Cocinar en una plancha caliente.'),
+(2, 1, 'Spaghetti à la Carbonara', 'Un plat de pâtes italien classique', 'Cuire les spaghettis. Faire frire la pancetta. Mélanger les œufs et le fromage. Mélanger tous les ingrédients.'),
+(2, 2, 'Spaghetti Carbonara', 'A classic Italian pasta dish', 'Cook spaghetti. Fry pancetta. Mix eggs and cheese. Combine all ingredients.'),
+(2, 3, 'Espaguetis Carbonara', 'Un plato clásico de pasta italiana', 'Cocinar espaguetis. Freír panceta. Mezclar huevos y queso. Combinar todos los ingredientes.'),
+(3, 1, 'Poulet Tikka Masala', 'Un plat de poulet indien savoureux', 'Faire mariner le poulet dans du yaourt et des épices. Cuire dans une sauce faite de tomates, de crème et d’épices.');
+(3, 2, 'Chicken Tikka Masala', 'A flavorful Indian chicken dish', 'Marinate chicken in yogurt and spices. Cook in a sauce made of tomatoes, cream, and spices.'),
+(3, 3, 'Pollo Tikka Masala', 'Un sabroso plato de pollo indio', 'Marinar el pollo en yogur y especias. Cocinar en una salsa hecha de tomates, crema y especias.'),
