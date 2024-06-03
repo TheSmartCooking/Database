@@ -1,3 +1,5 @@
+DROP PROCEDURE IF EXISTS update_last_login;
+
 DELIMITER $$
 
 CREATE PROCEDURE update_last_login(

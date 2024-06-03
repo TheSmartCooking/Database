@@ -1,3 +1,4 @@
+DROP PROCEDURE IF EXISTS get_locale;
 DROP PROCEDURE IF EXISTS get_paginated_recipes;
 DROP PROCEDURE IF EXISTS get_person_by_id;
 DROP PROCEDURE IF EXISTS get_recipe_by_id;
