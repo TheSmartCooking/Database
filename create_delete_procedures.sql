@@ -1,4 +1,6 @@
 DROP PROCEDURE IF EXISTS delete_favorite;
+DROP PROCEDURE IF EXISTS delete_comment;
+DROP PROCEDURE IF EXISTS delete_comment_like;
 
 DELIMITER $$
 
