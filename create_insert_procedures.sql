@@ -19,7 +19,7 @@ CREATE PROCEDURE create_person(
     IN p_email VARCHAR(100),
     IN p_password VARCHAR(100),
     IN p_salt VARBINARY(16),
-    IN p_locale_code VARCHAR(10) NULL
+    IN p_locale_code VARCHAR(10)
 )
 BEGIN
     DECLARE email_exists INT;
