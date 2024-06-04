@@ -18,11 +18,14 @@ CREATE PROCEDURE create_person (
     IN p_name VARCHAR(100),
     IN p_email VARCHAR(100),
     IN p_password VARCHAR(100),
-    IN p_salt VARBINARY(16)
+    IN p_salt VARBINARY(16),
+    IN p_locale_code VARCHAR(10) NULL
 )
 BEGIN
     DECLARE email_exists INT;
-    
+    DECLARE new_person_id INT;
+    DECLARE locale_id INT;
+
     -- Check if the email already exists
     SELECT COUNT(*) INTO email_exists
     FROM person
@@ -31,13 +34,22 @@ BEGIN
     IF email_exists = 0 THEN
         INSERT INTO person (name, email, password, salt)
         VALUES (p_name, p_email, p_password, p_salt);
+        
+        SET new_person_id = LAST_INSERT_ID();
+        
+        IF p_locale_code IS NOT NULL THEN
+            -- Get the locale_id for the provided locale_code
+            CALL get_locale(p_locale_code, locale_id);
+            -- Link the person to the locale
+            CALL update_person_locale(new_person_id, locale_id);
+        END IF;
     ELSE
         SIGNAL SQLSTATE '45000'
         SET MESSAGE_TEXT = 'Email already exists';
     END IF;
 END$$
 
-CREATE PROCEDURE create_image (
+CREATE PROCEDURE create_image(
     IN p_image_path VARCHAR(255),
     IN p_image_type ENUM('avatar', 'recipe', 'locale_icon')
 )
@@ -58,7 +70,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_locale (
+CREATE PROCEDURE create_locale(
     IN p_locale_code VARCHAR(10),
     IN p_locale_name VARCHAR(50),
     IN p_icon_image_id INT
@@ -80,7 +92,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_responsibility (
+CREATE PROCEDURE create_responsibility(
     IN p_responsibility_name VARCHAR(100)
 )
 BEGIN
@@ -100,7 +112,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_status (
+CREATE PROCEDURE create_status(
     IN p_status_name VARCHAR(50)
 )
 BEGIN
@@ -120,7 +132,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_ingredient (
+CREATE PROCEDURE create_ingredient(
     IN p_default_name VARCHAR(255)
 )
 BEGIN
@@ -140,7 +152,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_tag (
+CREATE PROCEDURE create_tag(
     IN p_tag_name VARCHAR(255)
 )
 BEGIN
@@ -160,7 +172,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_recipe (
+CREATE PROCEDURE create_recipe(
     IN p_author_id INT,
     IN p_image_id INT,
     IN p_cook_time INT UNSIGNED,
@@ -175,7 +187,7 @@ BEGIN
     VALUES (p_author_id, p_image_id, p_cook_time, p_difficulty_level, p_nutritional_information, p_source, p_video_url, p_status_id);
 END$$
 
-CREATE PROCEDURE create_comment (
+CREATE PROCEDURE create_comment(
     IN p_person_id INT,
     IN p_recipe_id INT,
     IN p_comment TEXT
@@ -185,40 +197,40 @@ BEGIN
     VALUES (p_person_id, p_recipe_id, p_comment);
 END$$
 
-CREATE PROCEDURE create_comment_like (
+CREATE PROCEDURE create_comment_like(
     IN p_person_id INT,
     IN p_comment_id INT
 )
 BEGIN
-    INSERT INTO comment_like (person_id, comment_id)
+    INSERT INTO comment_like(person_id, comment_id)
     VALUES (p_person_id, p_comment_id);
 END$$
 
-CREATE PROCEDURE create_favorite (
+CREATE PROCEDURE create_favorite(
     IN p_person_id INT,
     IN p_recipe_id INT
 )
 BEGIN
-    INSERT INTO favorite (person_id, recipe_id)
+    INSERT INTO favorite(person_id, recipe_id)
     VALUES (p_person_id, p_recipe_id);
 END$$
 
-CREATE PROCEDURE create_recipe_tag (
+CREATE PROCEDURE create_recipe_tag(
     IN p_recipe_id INT,
     IN p_tag_id INT
 )
 BEGIN
-    INSERT INTO recipe_tag (recipe_id, tag_id)
+    INSERT INTO recipe_tag(recipe_id, tag_id)
     VALUES (p_recipe_id, p_tag_id);
 END$$
 
-CREATE PROCEDURE create_recipe_rating (
+CREATE PROCEDURE create_recipe_rating(
     IN p_person_id INT,
     IN p_recipe_id INT,
     IN p_rating TINYINT
 )
 BEGIN
-    INSERT INTO recipe_rating (person_id, recipe_id, rating)
+    INSERT INTO recipe_rating(person_id, recipe_id, rating)
     VALUES (p_person_id, p_recipe_id, p_rating);
 END$$
 
