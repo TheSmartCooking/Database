@@ -39,9 +39,10 @@ BEGIN
         
         IF p_locale_code IS NOT NULL THEN
             -- Get the locale_id for the provided locale_code
-            CALL get_locale(p_locale_code, locale_id);
+            CALL get_locale(p_locale_code, @locale_id);
+            SET locale_id = @locale_id;
             -- Link the person to the locale
-            CALL update_person_locale(new_person_id, locale_id);
+            CALL link_person_to_locale(new_person_id, locale_id);
         END IF;
     ELSE
         SIGNAL SQLSTATE '45000'
