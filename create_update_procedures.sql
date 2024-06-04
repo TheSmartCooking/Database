@@ -1,4 +1,5 @@
 DROP PROCEDURE IF EXISTS update_last_login;
+DROP PROCEDURE IF EXISTS update_person_locale;
 
 DELIMITER $$
 
