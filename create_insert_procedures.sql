@@ -22,22 +22,22 @@ CREATE PROCEDURE create_person(
     IN p_locale_code VARCHAR(10)
 )
 BEGIN
-    DECLARE email_exists INT;
-    DECLARE new_person_id INT;
+    DECLARE v_email_exists INT;
+    DECLARE v_new_person_id INT;
 
     -- Check if the email already exists
-    SELECT COUNT(*) INTO email_exists
+    SELECT COUNT(*) INTO v_email_exists
     FROM person
     WHERE email = p_email;
     
-    IF email_exists = 0 THEN
+    IF v_email_exists = 0 THEN
         INSERT INTO person (name, email, password, salt)
         VALUES (p_name, p_email, p_password, p_salt);
         
-        SET new_person_id = LAST_INSERT_ID();
+        SET v_new_person_id = LAST_INSERT_ID();
         
         IF p_locale_code IS NOT NULL THEN
-            CALL update_person_locale(new_person_id, p_locale_code);
+            CALL update_person_locale(v_new_person_id, p_locale_code);
         END IF;
     ELSE
         SIGNAL SQLSTATE '45000'
@@ -50,14 +50,14 @@ CREATE PROCEDURE create_image(
     IN p_image_type ENUM('avatar', 'recipe', 'locale_icon')
 )
 BEGIN
-    DECLARE path_exists INT;
+    DECLARE v_path_exists INT;
     
     -- Check if the image path already exists
-    SELECT COUNT(*) INTO path_exists
+    SELECT COUNT(*) INTO v_path_exists
     FROM image
     WHERE image_path = p_image_path;
     
-    IF path_exists = 0 THEN
+    IF v_path_exists = 0 THEN
         INSERT INTO image (image_path, image_type)
         VALUES (p_image_path, p_image_type);
     ELSE
@@ -72,14 +72,14 @@ CREATE PROCEDURE create_locale(
     IN p_icon_image_id INT
 )
 BEGIN
-    DECLARE code_exists INT;
+    DECLARE v_code_exists INT;
     
     -- Check if the locale code already exists
-    SELECT COUNT(*) INTO code_exists
+    SELECT COUNT(*) INTO v_code_exists
     FROM locale
     WHERE locale_code = p_locale_code;
     
-    IF code_exists = 0 THEN
+    IF v_code_exists = 0 THEN
         INSERT INTO locale (locale_code, locale_name, icon_image_id)
         VALUES (p_locale_code, p_locale_name, p_icon_image_id);
     ELSE
@@ -92,14 +92,14 @@ CREATE PROCEDURE create_responsibility(
     IN p_responsibility_name VARCHAR(100)
 )
 BEGIN
-    DECLARE name_exists INT;
+    DECLARE v_name_exists INT;
     
     -- Check if the responsibility name already exists
-    SELECT COUNT(*) INTO name_exists
+    SELECT COUNT(*) INTO v_name_exists
     FROM responsibility
     WHERE responsibility_name = p_responsibility_name;
     
-    IF name_exists = 0 THEN
+    IF v_name_exists = 0 THEN
         INSERT INTO responsibility (responsibility_name)
         VALUES (p_responsibility_name);
     ELSE
@@ -112,14 +112,14 @@ CREATE PROCEDURE create_status(
     IN p_status_name VARCHAR(50)
 )
 BEGIN
-    DECLARE name_exists INT;
+    DECLARE v_name_exists INT;
     
     -- Check if the status name already exists
-    SELECT COUNT(*) INTO name_exists
+    SELECT COUNT(*) INTO v_name_exists
     FROM status
     WHERE status_name = p_status_name;
     
-    IF name_exists = 0 THEN
+    IF v_name_exists = 0 THEN
         INSERT INTO status (status_name)
         VALUES (p_status_name);
     ELSE
@@ -132,14 +132,14 @@ CREATE PROCEDURE create_ingredient(
     IN p_default_name VARCHAR(255)
 )
 BEGIN
-    DECLARE name_exists INT;
+    DECLARE v_name_exists INT;
     
     -- Check if the ingredient name already exists
-    SELECT COUNT(*) INTO name_exists
+    SELECT COUNT(*) INTO v_name_exists
     FROM ingredient
     WHERE default_name = p_default_name;
     
-    IF name_exists = 0 THEN
+    IF v_name_exists = 0 THEN
         INSERT INTO ingredient (default_name)
         VALUES (p_default_name);
     ELSE
@@ -152,14 +152,14 @@ CREATE PROCEDURE create_tag(
     IN p_tag_name VARCHAR(255)
 )
 BEGIN
-    DECLARE name_exists INT;
+    DECLARE v_name_exists INT;
     
     -- Check if the tag name already exists
-    SELECT COUNT(*) INTO name_exists
+    SELECT COUNT(*) INTO v_name_exists
     FROM tag
     WHERE tag_name = p_tag_name;
     
-    IF name_exists = 0 THEN
+    IF v_name_exists = 0 THEN
         INSERT INTO tag (tag_name)
         VALUES (p_tag_name);
     ELSE
@@ -207,8 +207,19 @@ CREATE PROCEDURE create_favorite(
     IN p_recipe_id INT
 )
 BEGIN
-    INSERT INTO favorite(person_id, recipe_id)
-    VALUES (p_person_id, p_recipe_id);
+    DECLARE v_favorite_exists INT;
+
+    -- Check if the favorite already exists
+    SELECT COUNT(*)
+    INTO v_favorite_exists
+    FROM favorite
+    WHERE person_id = p_person_id AND recipe_id = p_recipe_id;
+
+    -- If the favorite does not exist, insert it
+    IF v_favorite_exists = 0 THEN
+        INSERT INTO favorite(person_id, recipe_id)
+        VALUES (p_person_id, p_recipe_id);
+    END IF;
 END$$
 
 CREATE PROCEDURE create_recipe_tag(

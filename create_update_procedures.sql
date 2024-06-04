@@ -17,14 +17,14 @@ CREATE PROCEDURE update_person_locale(
     IN p_locale_code VARCHAR(10)
 )
 BEGIN
-    DECLARE locale_exists INT;
+    DECLARE v_locale_exists INT;
     
     -- Check if the locale exists
-    SELECT COUNT(*) INTO locale_exists
+    SELECT COUNT(*) INTO v_locale_exists
     FROM locale
     WHERE locale_code = p_locale_code;
     
-    IF locale_exists = 1 THEN
+    IF v_locale_exists = 1 THEN
         -- Update the person's locale_id
         UPDATE person
         SET locale_id = (SELECT locale_id FROM locale WHERE locale_code = p_locale_code)
