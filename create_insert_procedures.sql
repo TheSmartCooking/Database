@@ -37,7 +37,7 @@ BEGIN
         SET new_person_id = LAST_INSERT_ID();
         
         IF p_locale_code IS NOT NULL THEN
-            CALL update_person_locale(new_person_id, locale_code);
+            CALL update_person_locale(new_person_id, p_locale_code);
         END IF;
     ELSE
         SIGNAL SQLSTATE '45000'

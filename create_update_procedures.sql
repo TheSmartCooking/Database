@@ -11,7 +11,7 @@ BEGIN
     WHERE person_id = p_person_id;
 END$$
 
-CREATE PROCEDURE link_person_to_locale(
+CREATE PROCEDURE update_person_locale(
     IN p_person_id INT,
     IN p_locale_code VARCHAR(10)
 )
