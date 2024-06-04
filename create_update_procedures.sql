@@ -11,9 +11,9 @@ BEGIN
     WHERE person_id = p_person_id;
 END$$
 
-CREATE PROCEDURE update_person_locale(
+CREATE PROCEDURE link_person_to_locale(
     IN p_person_id INT,
-    IN p_locale_id INT
+    IN p_locale_code VARCHAR(10)
 )
 BEGIN
     DECLARE locale_exists INT;
@@ -21,12 +21,12 @@ BEGIN
     -- Check if the locale exists
     SELECT COUNT(*) INTO locale_exists
     FROM locale
-    WHERE locale_id = p_locale_id;
+    WHERE locale_code = p_locale_code;
     
     IF locale_exists = 1 THEN
         -- Update the person's locale_id
         UPDATE person
-        SET locale_id = p_locale_id
+        SET locale_id = (SELECT locale_id FROM locale WHERE locale_code = p_locale_code)
         WHERE person_id = p_person_id;
     ELSE
         SIGNAL SQLSTATE '45000'

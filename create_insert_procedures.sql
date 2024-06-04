@@ -24,7 +24,6 @@ CREATE PROCEDURE create_person(
 BEGIN
     DECLARE email_exists INT;
     DECLARE new_person_id INT;
-    DECLARE locale_id INT;
 
     -- Check if the email already exists
     SELECT COUNT(*) INTO email_exists
@@ -38,10 +37,7 @@ BEGIN
         SET new_person_id = LAST_INSERT_ID();
         
         IF p_locale_code IS NOT NULL THEN
-            -- Get the locale_id for the provided locale_code
-            CALL get_locale(p_locale_code, locale_id);
-            -- Link the person to the locale
-            CALL update_person_locale(new_person_id, locale_id);
+            CALL update_person_locale(new_person_id, locale_code);
         END IF;
     ELSE
         SIGNAL SQLSTATE '45000'
