@@ -14,7 +14,7 @@ DROP PROCEDURE IF EXISTS create_recipe_rating;
 
 DELIMITER $$
 
-CREATE PROCEDURE create_person(
+CREATE PROCEDURE create_person (
     IN p_name VARCHAR(100),
     IN p_email VARCHAR(100),
     IN p_password VARCHAR(100),
