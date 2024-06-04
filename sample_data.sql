@@ -1,8 +1,8 @@
 -- Sample data for insertion
 
 -- Create sample persons
-CALL create_person('John Doe', 'john.doe@example.com', 'passwordhash1', 'salt1');
-CALL create_person('Jane Smith', 'jane.smith@example.com', 'passwordhash2', 'salt2');
+CALL create_person('John Doe', 'john.doe@example.com', 'passwordhash1', 'salt1', NULL);
+CALL create_person('Jane Smith', 'jane.smith@example.com', 'passwordhash2', 'salt2', NULL);
 
 -- Create sample images
 CALL create_image('path/to/avatar1.jpg', 'avatar');
