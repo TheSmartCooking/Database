@@ -1,4 +1,17 @@
--- Sample data for insertion
+-- Empty the database
+CALL truncate_table('comment_likes');
+CALL truncate_table('comments');
+CALL truncate_table('favorites');
+CALL truncate_table('recipe_ratings');
+CALL truncate_table('recipe_tags');
+CALL truncate_table('recipes');
+CALL truncate_table('tags');
+CALL truncate_table('ingredients');
+CALL truncate_table('statuses');
+CALL truncate_table('responsibilities');
+CALL truncate_table('images');
+CALL truncate_table('persons');
+CALL truncate_table('locales');
 
 -- Create sample persons
 CALL create_person('John Doe', 'john.doe@example.com', 'passwordhash1', 'salt1', NULL);
