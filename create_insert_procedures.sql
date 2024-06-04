@@ -14,7 +14,7 @@ DROP PROCEDURE IF EXISTS create_recipe_rating;
 
 DELIMITER $$
 
-CREATE PROCEDURE create_person (
+CREATE PROCEDURE create_person(
     IN p_name VARCHAR(100),
     IN p_email VARCHAR(100),
     IN p_password VARCHAR(100),
@@ -39,10 +39,9 @@ BEGIN
         
         IF p_locale_code IS NOT NULL THEN
             -- Get the locale_id for the provided locale_code
-            CALL get_locale(p_locale_code, @locale_id);
-            SET locale_id = @locale_id;
+            CALL get_locale(p_locale_code, locale_id);
             -- Link the person to the locale
-            CALL link_person_to_locale(new_person_id, locale_id);
+            CALL update_person_locale(new_person_id, locale_id);
         END IF;
     ELSE
         SIGNAL SQLSTATE '45000'
