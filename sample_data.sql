@@ -1,33 +1,5 @@
--- Empty the database
-DROP PROCEDURE IF EXISTS truncate_table;
-
-DELIMITER $$
-
-CREATE PROCEDURE truncate_table(IN table_name VARCHAR(64))
-BEGIN
-    SET @query = CONCAT('TRUNCATE TABLE ', table_name);
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-END$$
-
-DELIMITER ;
-
-CALL truncate_table('comment_likes');
-CALL truncate_table('comments');
-CALL truncate_table('favorites');
-CALL truncate_table('recipe_ratings');
-CALL truncate_table('recipe_tags');
-CALL truncate_table('recipes');
-CALL truncate_table('tags');
-CALL truncate_table('ingredients');
-CALL truncate_table('statuses');
-CALL truncate_table('responsibilities');
-CALL truncate_table('images');
-CALL truncate_table('persons');
-CALL truncate_table('locales');
-
-DROP PROCEDURE IF EXISTS truncate_table;
+-- Use the database
+USE smartcooking;
 
 -- Create sample persons
 CALL create_person('John Doe', 'john.doe@example.com', 'passwordhash1', 'salt1', NULL);

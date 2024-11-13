@@ -1,34 +1,9 @@
-DROP PROCEDURE IF EXISTS get_locale;
-DROP PROCEDURE IF EXISTS get_paginated_recipes;
-DROP PROCEDURE IF EXISTS get_person_by_id;
-DROP PROCEDURE IF EXISTS get_recipe_by_id;
-DROP PROCEDURE IF EXISTS get_comments_by_recipe_id;
-DROP PROCEDURE IF EXISTS get_paginated_tags;
-DROP PROCEDURE IF EXISTS get_tags_by_recipe_id;
-DROP PROCEDURE IF EXISTS get_recipes_by_author;
-DROP PROCEDURE IF EXISTS get_comments_by_person;
-DROP PROCEDURE IF EXISTS get_recipes_by_tags;
-DROP PROCEDURE IF EXISTS get_recipe_ingredients_by_recipe_id;
-DROP PROCEDURE IF EXISTS get_recipe_translations_by_recipe_id;
-DROP PROCEDURE IF EXISTS get_all_locales;
-DROP PROCEDURE IF EXISTS get_all_statuses;
-DROP PROCEDURE IF EXISTS get_favorites_by_person_id;
-DROP PROCEDURE IF EXISTS get_ratings_by_recipe_id;
-DROP PROCEDURE IF EXISTS get_recipe_ids_by_ingredient;
-DROP PROCEDURE IF EXISTS get_recipes_by_newness;
-DROP PROCEDURE IF EXISTS get_recipes_by_popularity;
-DROP PROCEDURE IF EXISTS get_recipe_count_by_tag;
-DROP PROCEDURE IF EXISTS get_recipe_count_by_author;
-DROP PROCEDURE IF EXISTS get_recipes_by_status;
-DROP PROCEDURE IF EXISTS get_person_responsibilities_by_person_id;
-DROP PROCEDURE IF EXISTS get_ingredient_translations_by_ingredient_id;
-DROP PROCEDURE IF EXISTS get_person_settings_by_person_id;
-DROP PROCEDURE IF EXISTS get_images_by_type;
-DROP PROCEDURE IF EXISTS get_responsibilities;
+-- Use the database
+USE smartcooking;
 
 DELIMITER $$
 
-CREATE PROCEDURE get_locale(
+CREATE OR REPLACE PROCEDURE get_locale(
     IN p_locale_code VARCHAR(10),
     OUT p_locale_id INT
 )
@@ -48,7 +23,7 @@ BEGIN
     SET p_locale_id = v_locale_id;
 END$$
 
-CREATE PROCEDURE get_paginated_recipes(
+CREATE OR REPLACE PROCEDURE get_paginated_recipes(
     IN p_locale_code VARCHAR(10),
     IN p_status_name VARCHAR(50),
     IN p_page INT,
@@ -94,7 +69,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE get_person_by_id(
+CREATE OR REPLACE PROCEDURE get_person_by_id(
     IN p_person_id INT
 )
 BEGIN
@@ -121,7 +96,7 @@ BEGIN
         p.person_id;
 END$$
 
-CREATE PROCEDURE get_recipe_by_id(
+CREATE OR REPLACE PROCEDURE get_recipe_by_id(
     IN p_recipe_id INT
 )
 BEGIN
@@ -157,7 +132,7 @@ BEGIN
         r.recipe_id = p_recipe_id;
 END$$
 
-CREATE PROCEDURE get_comments_by_recipe_id(
+CREATE OR REPLACE PROCEDURE get_comments_by_recipe_id(
     IN p_recipe_id INT,
     IN p_page INT,
     IN p_page_size INT
@@ -187,7 +162,7 @@ BEGIN
         v_offset, p_page_size;
 END$$
 
-CREATE PROCEDURE get_paginated_tags(
+CREATE OR REPLACE PROCEDURE get_paginated_tags(
     IN p_page INT,
     IN p_page_size INT
 )
@@ -203,7 +178,7 @@ BEGIN
         v_offset, p_page_size;
 END$$
 
-CREATE PROCEDURE get_tags_by_recipe_id(
+CREATE OR REPLACE PROCEDURE get_tags_by_recipe_id(
     IN p_recipe_id INT
 )
 BEGIN
@@ -218,7 +193,7 @@ BEGIN
         rt.recipe_id = p_recipe_id;
 END$$
 
-CREATE PROCEDURE get_recipes_by_author(
+CREATE OR REPLACE PROCEDURE get_recipes_by_author(
     IN p_author_id INT,
     IN p_page INT,
     IN p_page_size INT
@@ -244,7 +219,7 @@ BEGIN
         v_offset, p_page_size;
 END$$
 
-CREATE PROCEDURE get_comments_by_person(
+CREATE OR REPLACE PROCEDURE get_comments_by_person(
     IN p_person_id INT,
     IN p_page INT,
     IN p_page_size INT
@@ -270,7 +245,7 @@ BEGIN
         v_offset, p_page_size;
 END$$
 
-CREATE PROCEDURE get_recipes_by_tags(
+CREATE OR REPLACE PROCEDURE get_recipes_by_tags(
     IN p_tag_ids VARCHAR(255),
     IN p_locale_id INT,
     IN p_status_name VARCHAR(50),
@@ -297,7 +272,7 @@ BEGIN
     DEALLOCATE PREPARE stmt;
 END$$
 
-CREATE PROCEDURE get_recipes_by_newness(
+CREATE OR REPLACE PROCEDURE get_recipes_by_newness(
     IN p_locale_id INT,
     IN p_status_name VARCHAR(50),
     IN p_offset INT,
@@ -329,7 +304,7 @@ BEGIN
         p_offset, p_page_size;
 END$$
 
-CREATE PROCEDURE get_recipes_by_popularity(
+CREATE OR REPLACE PROCEDURE get_recipes_by_popularity(
     IN p_locale_id INT,
     IN p_status_name VARCHAR(50),
     IN p_offset INT,
@@ -361,7 +336,7 @@ BEGIN
         p_offset, p_page_size;
 END$$
 
-CREATE PROCEDURE get_recipe_ingredients_by_recipe_id(
+CREATE OR REPLACE PROCEDURE get_recipe_ingredients_by_recipe_id(
     IN p_recipe_id INT
 )
 BEGIN
@@ -378,7 +353,7 @@ BEGIN
         ri.recipe_id = p_recipe_id;
 END$$
 
-CREATE PROCEDURE get_recipe_translations_by_recipe_id(
+CREATE OR REPLACE PROCEDURE get_recipe_translations_by_recipe_id(
     IN p_recipe_id INT
 )
 BEGIN
@@ -397,7 +372,7 @@ BEGIN
         rt.recipe_id = p_recipe_id;
 END$$
 
-CREATE PROCEDURE get_all_locales()
+CREATE OR REPLACE PROCEDURE get_all_locales()
 BEGIN
     SELECT 
         l.locale_id,
@@ -410,7 +385,7 @@ BEGIN
         image i ON l.icon_image_id = i.image_id;
 END$$
 
-CREATE PROCEDURE get_all_statuses()
+CREATE OR REPLACE PROCEDURE get_all_statuses()
 BEGIN
     SELECT 
         status_id,
@@ -419,7 +394,7 @@ BEGIN
         status;
 END$$
 
-CREATE PROCEDURE get_favorites_by_person_id(
+CREATE OR REPLACE PROCEDURE get_favorites_by_person_id(
     IN p_person_id INT
 )
 BEGIN
@@ -443,7 +418,7 @@ BEGIN
         f.person_id = p_person_id;
 END$$
 
-CREATE PROCEDURE get_ratings_by_recipe_id(
+CREATE OR REPLACE PROCEDURE get_ratings_by_recipe_id(
     IN p_recipe_id INT
 )
 BEGIN
@@ -460,7 +435,7 @@ BEGIN
         rr.recipe_id = p_recipe_id;
 END$$
 
-CREATE PROCEDURE get_recipe_ids_by_ingredient(
+CREATE OR REPLACE PROCEDURE get_recipe_ids_by_ingredient(
     IN p_ingredient_ids VARCHAR(255)
 )
 BEGIN

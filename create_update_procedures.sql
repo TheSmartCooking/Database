@@ -1,9 +1,9 @@
-DROP PROCEDURE IF EXISTS update_last_login;
-DROP PROCEDURE IF EXISTS update_person_locale;
+-- Use the database
+USE smartcooking;
 
 DELIMITER $$
 
-CREATE PROCEDURE update_last_login(
+CREATE OR REPLACE PROCEDURE update_last_login(
     IN p_person_id INT
 )
 BEGIN
@@ -12,7 +12,7 @@ BEGIN
     WHERE person_id = p_person_id;
 END$$
 
-CREATE PROCEDURE update_person_locale(
+CREATE OR REPLACE PROCEDURE update_person_locale(
     IN p_person_id INT,
     IN p_locale_code VARCHAR(10)
 )

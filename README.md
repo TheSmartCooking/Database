@@ -3,6 +3,29 @@
 This repository contains SQL scripts to generate a database schema in MariaDB.
 The schema includes tables for managing recipes, comments, users, tags, and more.
 
+## Getting Started
+
+To set up the database locally, you'll need Docker installed. Follow the steps below to build and run the database in a container.
+
+### Setup Steps
+
+1. **Build the Docker Image**:
+
+   ```bash
+   docker build -t smartcooking-mariadb .
+   ```
+
+2. **Run the Docker Container**:
+
+   ```bash
+   docker run -d -p 3306:3306 --name Smart-Cooking_Database -e MYSQL_ROOT_PASSWORD=myrootpassword smartcooking-mariadb
+   ```
+
+3. **Access the Database**:
+   ```bash
+   docker exec -it Smart-Cooking_Database mariadb -uroot -pmyrootpassword
+   ```
+
 ## Database Schema Overview
 
 The database schema consists of the following tables:

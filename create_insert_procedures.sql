@@ -1,20 +1,9 @@
-DROP PROCEDURE IF EXISTS create_person;
-DROP PROCEDURE IF EXISTS create_image;
-DROP PROCEDURE IF EXISTS create_locale;
-DROP PROCEDURE IF EXISTS create_responsibility;
-DROP PROCEDURE IF EXISTS create_status;
-DROP PROCEDURE IF EXISTS create_ingredient;
-DROP PROCEDURE IF EXISTS create_tag;
-DROP PROCEDURE IF EXISTS create_recipe;
-DROP PROCEDURE IF EXISTS create_comment;
-DROP PROCEDURE IF EXISTS create_comment_like;
-DROP PROCEDURE IF EXISTS create_favorite;
-DROP PROCEDURE IF EXISTS create_recipe_tag;
-DROP PROCEDURE IF EXISTS create_recipe_rating;
+-- Use the database
+USE smartcooking;
 
 DELIMITER $$
 
-CREATE PROCEDURE create_person(
+CREATE OR REPLACE PROCEDURE create_person(
     IN p_name VARCHAR(100),
     IN p_email VARCHAR(100),
     IN p_password VARCHAR(100),
@@ -45,7 +34,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_image(
+CREATE OR REPLACE PROCEDURE create_image(
     IN p_image_path VARCHAR(255),
     IN p_image_type ENUM('avatar', 'recipe', 'locale_icon')
 )
@@ -66,7 +55,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_locale(
+CREATE OR REPLACE PROCEDURE create_locale(
     IN p_locale_code VARCHAR(10),
     IN p_locale_name VARCHAR(50),
     IN p_icon_image_id INT
@@ -88,7 +77,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_responsibility(
+CREATE OR REPLACE PROCEDURE create_responsibility(
     IN p_responsibility_name VARCHAR(100)
 )
 BEGIN
@@ -108,7 +97,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_status(
+CREATE OR REPLACE PROCEDURE create_status(
     IN p_status_name VARCHAR(50)
 )
 BEGIN
@@ -128,7 +117,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_ingredient(
+CREATE OR REPLACE PROCEDURE create_ingredient(
     IN p_default_name VARCHAR(255)
 )
 BEGIN
@@ -148,7 +137,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_tag(
+CREATE OR REPLACE PROCEDURE create_tag(
     IN p_tag_name VARCHAR(255)
 )
 BEGIN
@@ -168,7 +157,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_recipe(
+CREATE OR REPLACE PROCEDURE create_recipe(
     IN p_author_id INT,
     IN p_image_id INT,
     IN p_cook_time INT UNSIGNED,
@@ -183,7 +172,7 @@ BEGIN
     VALUES (p_author_id, p_image_id, p_cook_time, p_difficulty_level, p_nutritional_information, p_source, p_video_url, p_status_id);
 END$$
 
-CREATE PROCEDURE create_comment(
+CREATE OR REPLACE PROCEDURE create_comment(
     IN p_person_id INT,
     IN p_recipe_id INT,
     IN p_comment TEXT
@@ -193,7 +182,7 @@ BEGIN
     VALUES (p_person_id, p_recipe_id, p_comment);
 END$$
 
-CREATE PROCEDURE create_comment_like(
+CREATE OR REPLACE PROCEDURE create_comment_like(
     IN p_person_id INT,
     IN p_comment_id INT
 )
@@ -202,7 +191,7 @@ BEGIN
     VALUES (p_person_id, p_comment_id);
 END$$
 
-CREATE PROCEDURE create_favorite(
+CREATE OR REPLACE PROCEDURE create_favorite(
     IN p_person_id INT,
     IN p_recipe_id INT
 )
@@ -222,7 +211,7 @@ BEGIN
     END IF;
 END$$
 
-CREATE PROCEDURE create_recipe_tag(
+CREATE OR REPLACE PROCEDURE create_recipe_tag(
     IN p_recipe_id INT,
     IN p_tag_id INT
 )
@@ -231,7 +220,7 @@ BEGIN
     VALUES (p_recipe_id, p_tag_id);
 END$$
 
-CREATE PROCEDURE create_recipe_rating(
+CREATE OR REPLACE PROCEDURE create_recipe_rating(
     IN p_person_id INT,
     IN p_recipe_id INT,
     IN p_rating TINYINT
