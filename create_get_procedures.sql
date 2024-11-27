@@ -29,44 +29,74 @@ CREATE OR REPLACE PROCEDURE get_paginated_recipes(
     IN p_page INT,
     IN p_page_size INT,
     IN p_sort_by VARCHAR(20),
-    IN p_tag_ids VARCHAR(255)
+    IN p_tag_ids VARCHAR(255) -- NULLABLE for cases without tags
 )
 BEGIN
     DECLARE v_offset INT DEFAULT (p_page - 1) * p_page_size;
     DECLARE v_locale_id INT;
 
-    CALL get_locale(p_locale_code, v_locale_id);
+    -- Fetch locale_id from locale_code
+    SELECT locale_id INTO v_locale_id
+    FROM locale
+    WHERE locale_code = p_locale_code;
 
-    -- Conditional logic to call appropriate procedure based on sorting criteria
-    IF p_sort_by = 'most_recent' THEN
-        CALL get_recipes_by_newness(v_locale_id, p_status_name, v_offset, p_page_size);
-    ELSEIF p_sort_by = 'most_popular' THEN
-        CALL get_recipes_by_popularity(v_locale_id, p_status_name, v_offset, p_page_size);
-    ELSEIF p_sort_by = 'by_tags' THEN
-        CALL get_recipes_by_tags(p_tag_ids, v_locale_id, p_status_name, v_offset, p_page_size);
-    ELSE
-        SELECT 
-            r.recipe_id,
-            rt.title,
-            r.cook_time,
-            r.difficulty_level,
-            i.image_path AS image
-        FROM 
-            recipe r
-        INNER JOIN 
-            recipe_translation rt ON r.recipe_id = rt.recipe_id
-        INNER JOIN 
-            locale l ON rt.locale_id = l.locale_id
-        INNER JOIN 
-            status s ON r.status_id = s.status_id
-        LEFT JOIN 
-            image i ON r.image_id = i.image_id
-        WHERE 
-            l.locale_id = v_locale_id
-            AND s.status_name = p_status_name
-        LIMIT 
-            v_offset, p_page_size;
+    -- Build the base query
+    SET @base_query = CONCAT(
+        'SELECT r.recipe_id, rt.title, r.cook_time, r.difficulty_level, ',
+        'i.image_path AS image, r.publication_date, r.number_of_reviews, ',
+        'p.name AS author ',
+        'FROM recipe r ',
+        'INNER JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id ',
+        'INNER JOIN locale l ON rt.locale_id = l.locale_id ',
+        'INNER JOIN status s ON r.status_id = s.status_id ',
+        'LEFT JOIN image i ON r.image_id = i.image_id ',
+        'LEFT JOIN person p ON r.author_id = p.person_id ' -- Include author details
+    );
+
+    -- Add tag filtering logic if tags are provided
+    IF p_tag_ids IS NOT NULL AND p_tag_ids != '' THEN
+        SET @base_query = CONCAT(
+            @base_query,
+            'INNER JOIN recipe_tag rtg ON r.recipe_id = rtg.recipe_id ',
+            'INNER JOIN tag t ON t.tag_id = rtg.tag_id '
+        );
     END IF;
+
+    -- Add WHERE conditions
+    SET @base_query = CONCAT(
+        @base_query,
+        'WHERE l.locale_id = ', v_locale_id, ' ',
+        'AND s.status_name = "', p_status_name, '" '
+    );
+
+    IF p_tag_ids IS NOT NULL AND p_tag_ids != '' THEN
+        SET @base_query = CONCAT(
+            @base_query,
+            'AND t.tag_id IN (', p_tag_ids, ') '
+        );
+    END IF;
+
+    -- Add ORDER BY clause based on p_sort_by
+    CASE p_sort_by
+        WHEN 'most_recent' THEN
+            SET @base_query = CONCAT(@base_query, 'ORDER BY r.publication_date DESC ');
+        WHEN 'most_popular' THEN
+            SET @base_query = CONCAT(@base_query, 'ORDER BY r.number_of_reviews DESC ');
+        WHEN 'alphabetical' THEN
+            SET @base_query = CONCAT(@base_query, 'ORDER BY rt.title ASC ');
+        WHEN 'cook_time' THEN
+            SET @base_query = CONCAT(@base_query, 'ORDER BY r.cook_time ASC ');
+        ELSE
+            SET @base_query = CONCAT(@base_query, 'ORDER BY r.recipe_id ASC '); -- Default sorting
+    END CASE;
+
+    -- Add pagination
+    SET @base_query = CONCAT(@base_query, 'LIMIT ', v_offset, ', ', p_page_size);
+
+    -- Prepare and execute the query
+    PREPARE stmt FROM @base_query;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
 END$$
 
 CREATE OR REPLACE PROCEDURE get_person_by_id(
@@ -243,97 +273,6 @@ BEGIN
         c.person_id = p_person_id
     LIMIT 
         v_offset, p_page_size;
-END$$
-
-CREATE OR REPLACE PROCEDURE get_recipes_by_tags(
-    IN p_tag_ids VARCHAR(255),
-    IN p_locale_id INT,
-    IN p_status_name VARCHAR(50),
-    IN p_offset INT,
-    IN p_page_size INT
-)
-BEGIN
-    SET @query = CONCAT(
-        'SELECT r.recipe_id, rt.title, r.cook_time, r.difficulty_level, i.image_path AS image ',
-        'FROM recipe r ',
-        'INNER JOIN recipe_tag rtg ON r.recipe_id = rtg.recipe_id ',
-        'INNER JOIN tag t ON t.tag_id = rtg.tag_id ',
-        'LEFT JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id ',
-        'LEFT JOIN image i ON r.image_id = i.image_id ',
-        'INNER JOIN locale l ON rt.locale_id = l.locale_id ',
-        'INNER JOIN status s ON r.status_id = s.status_id ',
-        'WHERE t.tag_id IN (', p_tag_ids, ') ',
-        'AND l.locale_id = \'', p_locale_id, '\' ',
-        'AND s.status_name = \'', p_status_name, '\' ',
-        'LIMIT ', p_offset, ', ', p_page_size
-    );
-    PREPARE stmt FROM @query;
-    EXECUTE stmt;
-    DEALLOCATE PREPARE stmt;
-END$$
-
-CREATE OR REPLACE PROCEDURE get_recipes_by_newness(
-    IN p_locale_id INT,
-    IN p_status_name VARCHAR(50),
-    IN p_offset INT,
-    IN p_page_size INT
-)
-BEGIN
-    SELECT 
-        r.recipe_id,
-        rt.title,
-        r.cook_time,
-        r.difficulty_level,
-        i.image_path AS image
-    FROM 
-        recipe r
-    INNER JOIN 
-        recipe_translation rt ON r.recipe_id = rt.recipe_id
-    INNER JOIN 
-        locale l ON rt.locale_id = l.locale_id
-    INNER JOIN 
-        status s ON r.status_id = s.status_id
-    LEFT JOIN 
-        image i ON r.image_id = i.image_id
-    WHERE 
-        l.locale_id = p_locale_id
-        AND s.status_name = p_status_name
-    ORDER BY 
-        r.publication_date DESC
-    LIMIT 
-        p_offset, p_page_size;
-END$$
-
-CREATE OR REPLACE PROCEDURE get_recipes_by_popularity(
-    IN p_locale_id INT,
-    IN p_status_name VARCHAR(50),
-    IN p_offset INT,
-    IN p_page_size INT
-)
-BEGIN
-    SELECT 
-        r.recipe_id,
-        rt.title,
-        r.cook_time,
-        r.difficulty_level,
-        i.image_path AS image
-    FROM 
-        recipe r
-    INNER JOIN 
-        recipe_translation rt ON r.recipe_id = rt.recipe_id
-    INNER JOIN 
-        locale l ON rt.locale_id = l.locale_id
-    INNER JOIN 
-        status s ON r.status_id = s.status_id
-    LEFT JOIN 
-        image i ON r.image_id = i.image_id
-    WHERE 
-        l.locale_id = p_locale_id
-        AND s.status_name = p_status_name
-    ORDER BY 
-        r.number_of_reviews DESC
-    LIMIT 
-        p_offset, p_page_size;
 END$$
 
 CREATE OR REPLACE PROCEDURE get_recipe_ingredients_by_recipe_id(
