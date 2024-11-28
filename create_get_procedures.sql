@@ -311,6 +311,13 @@ BEGIN
         rt.recipe_id = p_recipe_id;
 END$$
 
+CREATE OR REPLACE PROCEDURE get_locales_codes()
+BEGIN
+    -- Directly return the concatenated list of locale codes
+    SELECT GROUP_CONCAT(locale_code SEPARATOR ',') AS locale_codes
+    FROM locale;
+END $$
+
 CREATE OR REPLACE PROCEDURE get_all_locales()
 BEGIN
     SELECT 
