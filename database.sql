@@ -109,7 +109,7 @@ CREATE OR REPLACE TABLE recipe_translation (
     recipe_id INT,
     language_id INT,
     title VARCHAR(255),
-    description TEXT,
+    details TEXT,
     preparation TEXT,
     PRIMARY KEY (recipe_id, language_id),
     FOREIGN KEY (recipe_id) REFERENCES recipe (recipe_id) ON DELETE CASCADE,
