@@ -47,11 +47,6 @@ CREATE OR REPLACE TABLE lang_icon (
     FOREIGN KEY (icon_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
-CREATE OR REPLACE TABLE status (
-    status_id INT AUTO_INCREMENT PRIMARY KEY,
-    status_name VARCHAR(50) UNIQUE
-) ENGINE = InnoDB;
-
 CREATE OR REPLACE TABLE person_setting (
     person_id INT,
     setting_key VARCHAR(100),
@@ -99,10 +94,9 @@ CREATE OR REPLACE TABLE recipe (
     nutritional_information TEXT NULL,
     source VARCHAR(255) NULL,
     video_url VARCHAR(255) NULL,
-    status_id INT,
+    recipe_status ENUM('draft', 'published', 'hidden', 'archived', 'pending review', 'rejected', 'scheduled', 'needs update', 'unlisted', 'deleted') NOT NULL DEFAULT 'draft',
     FOREIGN KEY (author_id) REFERENCES person (person_id) ON DELETE CASCADE,
-    FOREIGN KEY (picture_id) REFERENCES picture (picture_id) ON DELETE SET NULL,
-    FOREIGN KEY (status_id) REFERENCES status (status_id)
+    FOREIGN KEY (picture_id) REFERENCES picture (picture_id) ON DELETE SET NULL
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE recipe_translation (
