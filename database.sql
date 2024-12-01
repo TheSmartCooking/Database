@@ -23,28 +23,28 @@ CREATE OR REPLACE TABLE person (
     FOREIGN KEY (language_id) REFERENCES lang (language_id) ON DELETE SET NULL
 ) ENGINE = InnoDB;
 
-CREATE OR REPLACE TABLE image (
-    image_id INT AUTO_INCREMENT PRIMARY KEY,
-    image_path VARCHAR(255) UNIQUE,
+CREATE OR REPLACE TABLE picture (
+    picture_id INT AUTO_INCREMENT PRIMARY KEY,
+    picture_path VARCHAR(255) UNIQUE,
     author_id INT NULL,
-    image_type ENUM('avatar', 'recipe', 'lang_icon') NOT NULL,
+    picture_type ENUM('avatar', 'recipe', 'language_icon') NOT NULL,
     FOREIGN KEY (author_id) REFERENCES person (person_id) ON DELETE SET NULL
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE person_avatar (
     person_id INT NOT NULL,
-    avatar_image_id INT NOT NULL,
-    PRIMARY KEY (person_id, avatar_image_id),
+    avatar_picture_id INT NOT NULL,
+    PRIMARY KEY (person_id, avatar_picture_id),
     FOREIGN KEY (person_id) REFERENCES person (person_id) ON DELETE CASCADE,
-    FOREIGN KEY (avatar_image_id) REFERENCES image (image_id) ON DELETE CASCADE
+    FOREIGN KEY (avatar_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE lang_icon (
     language_id INT NOT NULL,
-    icon_image_id INT NOT NULL,
-    PRIMARY KEY (language_id, icon_image_id),
+    icon_picture_id INT NOT NULL,
+    PRIMARY KEY (language_id, icon_picture_id),
     FOREIGN KEY (language_id) REFERENCES lang (language_id) ON DELETE CASCADE,
-    FOREIGN KEY (icon_image_id) REFERENCES image (image_id) ON DELETE CASCADE
+    FOREIGN KEY (icon_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE status (
@@ -92,7 +92,7 @@ CREATE OR REPLACE TABLE recipe (
     author_id INT,
     publication_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     modification_date TIMESTAMP NULL,
-    image_id INT NULL,
+    picture_id INT NULL,
     cook_time INT UNSIGNED NULL,
     difficulty_level TINYINT CHECK (difficulty_level BETWEEN 1 AND 3),
     number_of_reviews INT NULL,
@@ -101,7 +101,7 @@ CREATE OR REPLACE TABLE recipe (
     video_url VARCHAR(255) NULL,
     status_id INT,
     FOREIGN KEY (author_id) REFERENCES person (person_id) ON DELETE CASCADE,
-    FOREIGN KEY (image_id) REFERENCES image (image_id) ON DELETE SET NULL,
+    FOREIGN KEY (picture_id) REFERENCES picture (picture_id) ON DELETE SET NULL,
     FOREIGN KEY (status_id) REFERENCES status (status_id)
 ) ENGINE = InnoDB;
 
