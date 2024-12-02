@@ -5,21 +5,23 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE get_all_persons()
 BEGIN
-    SELECT person_id, person_name, email, registration_date, last_login, locale_id
-    FROM person;
+    SELECT p.person_id, p.person_name, p.locale_id
+    FROM person p;
 END //
 
 CREATE OR REPLACE PROCEDURE get_person_by_id(IN p_person_id INT)
 BEGIN
-    SELECT person_id, person_name, email, registration_date, last_login, locale_id
-    FROM person
+    SELECT p.person_id, p.person_name, p.locale_id, pa.avatar_picture_id AS avatar_id
+    FROM person p
+    INNER JOIN person_avatar pa ON p.person_id = pa.person_id
     WHERE person_id = p_person_id;
 END //
 
 CREATE OR REPLACE PROCEDURE get_person_by_email(IN p_email VARCHAR(100))
 BEGIN
-    SELECT person_id, person_name, email, registration_date, last_login, locale_id
-    FROM person
+    SELECT p.person_id, p.person_name, p.locale_id, pa.avatar_picture_id AS avatar_id
+    FROM person p
+    INNER JOIN person_avatar pa ON p.person_id = pa.person_id
     WHERE email = p_email;
 END //
 
@@ -40,14 +42,14 @@ END //
 
 CREATE OR REPLACE PROCEDURE get_recent_persons(IN p_start_date TIMESTAMP, IN p_end_date TIMESTAMP)
 BEGIN
-    SELECT person_id, person_name, email, registration_date
+    SELECT person_id, person_name, registration_date
     FROM person
     WHERE registration_date BETWEEN p_start_date AND p_end_date;
 END //
 
 CREATE OR REPLACE PROCEDURE get_persons_by_locale(IN p_locale_id INT)
 BEGIN
-    SELECT person_id, person_name, email, registration_date
+    SELECT person_id, person_name
     FROM person
     WHERE locale_id = p_locale_id;
 END //
