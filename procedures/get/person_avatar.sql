@@ -8,7 +8,7 @@ BEGIN
     SELECT * FROM person_avatar;
 END //
 
-CREATE PROCEDURE get_person_avatar_picture(IN p_person_id INT)
+CREATE PROCEDURE get_person_avatar(IN p_person_id INT)
 BEGIN
     SELECT avatar_picture_id FROM person_avatar
     WHERE person_id = p_person_id;
