@@ -36,7 +36,8 @@ CREATE OR REPLACE TABLE person_avatar (
     avatar_picture_id INT NOT NULL,
     PRIMARY KEY (person_id, avatar_picture_id),
     FOREIGN KEY (person_id) REFERENCES person (person_id) ON DELETE CASCADE,
-    FOREIGN KEY (avatar_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE
+    FOREIGN KEY (avatar_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE,
+    UNIQUE (person_id)
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE lang_icon (
@@ -44,7 +45,8 @@ CREATE OR REPLACE TABLE lang_icon (
     icon_picture_id INT NOT NULL,
     PRIMARY KEY (language_id, icon_picture_id),
     FOREIGN KEY (language_id) REFERENCES lang (language_id) ON DELETE CASCADE,
-    FOREIGN KEY (icon_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE
+    FOREIGN KEY (icon_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE,
+    UNIQUE (language_id)
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE person_setting (
