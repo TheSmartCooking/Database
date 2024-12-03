@@ -51,7 +51,7 @@ CREATE OR REPLACE TABLE lang_icon (
 
 CREATE OR REPLACE TABLE person_setting (
     person_id INT,
-    setting_key VARCHAR(100),
+    setting_key VARCHAR(100) UNIQUE,
     setting_value VARCHAR(255),
     PRIMARY KEY (person_id, setting_key),
     FOREIGN KEY (person_id) REFERENCES person (person_id) ON DELETE CASCADE
