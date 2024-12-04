@@ -21,14 +21,14 @@ BEGIN
 
     -- Insert aggregated data into the temporary table
     INSERT INTO temp_settings_count (setting_key, setting_value, user_count)
-    SELECT 
-        setting_key, 
-        setting_value, 
+    SELECT
+        setting_key,
+        setting_value,
         COUNT(person_id) AS user_count
-    FROM 
+    FROM
         person_setting
-    GROUP BY 
-        setting_key, 
+    GROUP BY
+        setting_key,
         setting_value;
 
     -- Return the data

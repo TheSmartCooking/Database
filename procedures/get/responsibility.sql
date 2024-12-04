@@ -5,13 +5,12 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE get_all_responsibilities()
 BEGIN
-    SELECT responsibility_id, responsibility_name
-    FROM responsibility;
+    SELECT * FROM responsibility;
 END //
 
 CREATE OR REPLACE PROCEDURE get_responsibilities_analitycs()
 BEGIN
-    SELECT 
+    SELECT
         r.responsibility_id,
         r.responsibility_name,
         (SELECT COUNT(*) FROM person_responsibility pr WHERE pr.responsibility_id = r.responsibility_id) AS total_persons

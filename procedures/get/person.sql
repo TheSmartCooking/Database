@@ -25,14 +25,14 @@ END //
 
 CREATE OR REPLACE PROCEDURE get_person_activity_summary(IN p_person_id INT)
 BEGIN
-    SELECT 
+    SELECT
         p.person_id,
         p.name,
         p.email,
         (SELECT COUNT(*) FROM comment c WHERE c.person_id = p.person_id) AS total_comments,
-        (SELECT COUNT(*) 
-         FROM comment_like cl 
-         JOIN comment c ON cl.comment_id = c.comment_id 
+        (SELECT COUNT(*)
+         FROM comment_like cl
+         JOIN comment c ON cl.comment_id = c.comment_id
          WHERE c.person_id = p.person_id) AS total_comment_likes_received
     FROM person p
     WHERE p.person_id = p_person_id;

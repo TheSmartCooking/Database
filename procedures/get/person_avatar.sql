@@ -16,8 +16,8 @@ END //
 
 CREATE OR REPLACE PROCEDURE get_avatar_usage_statistics()
 BEGIN
-    SELECT 
-        pa.avatar_picture_id, 
+    SELECT
+        pa.avatar_picture_id,
         (SELECT COUNT(p.person_id) FROM person p WHERE p.person_id = pa.person_id) AS user_count
     FROM person_avatar pa;
 END //

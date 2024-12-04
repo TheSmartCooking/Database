@@ -5,8 +5,7 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE get_all_languages()
 BEGIN
-    SELECT language_id, iso_code, language_name
-    FROM lang;
+    SELECT * FROM lang;
 END //
 
 CREATE OR REPLACE PROCEDURE get_language_by_id(IN p_language_id INT)
@@ -49,10 +48,10 @@ END //
 
 CREATE OR REPLACE PROCEDURE get_language_usage_statistics()
 BEGIN
-    SELECT 
-        l.language_id, 
-        l.iso_code, 
-        l.language_name, 
+    SELECT
+        l.language_id,
+        l.iso_code,
+        l.language_name,
         (SELECT COUNT(p.person_id) FROM person p WHERE p.language_id = l.language_id) AS user_count,
         (SELECT COUNT(it.ingredient_id) FROM ingredient_translation it WHERE it.language_id = l.language_id) AS ingredient_translation_count,
         (SELECT COUNT(rt.recipe_id) FROM recipe_translation rt WHERE rt.language_id = l.language_id) AS recipe_translation_count

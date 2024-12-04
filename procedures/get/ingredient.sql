@@ -5,8 +5,7 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE get_all_ingredients()
 BEGIN
-    SELECT ingredient_id, ingredient_name, ingredient_description
-    FROM ingredient;
+    SELECT * FROM ingredient;
 END //
 
 DELIMITER ;
