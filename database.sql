@@ -6,7 +6,7 @@ USE smartcooking;
 
 CREATE OR REPLACE TABLE lang (
     language_id INT AUTO_INCREMENT PRIMARY KEY,
-    iso_code VARCHAR(2) UNIQUE,
+    iso_code CHAR(2) UNIQUE,
     language_name VARCHAR(30) UNIQUE,
     native_name VARCHAR(30) UNIQUE
 ) ENGINE = InnoDB;
