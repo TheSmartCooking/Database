@@ -3,6 +3,7 @@ USE smartcooking;
 
 DELIMITER //
 
+-- This procedure is intended for testing purposes only
 CREATE OR REPLACE PROCEDURE get_all_ingredients_translations()
 BEGIN
     SELECT * FROM ingredient_translation;

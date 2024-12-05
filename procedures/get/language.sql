@@ -3,6 +3,7 @@ USE smartcooking;
 
 DELIMITER //
 
+-- This procedure is intended for testing purposes only
 CREATE OR REPLACE PROCEDURE get_all_languages()
 BEGIN
     SELECT * FROM lang;

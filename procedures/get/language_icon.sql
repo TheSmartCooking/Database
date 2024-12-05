@@ -3,6 +3,7 @@ USE smartcooking;
 
 DELIMITER //
 
+-- This procedure is intended for testing purposes only
 CREATE PROCEDURE get_all_language_icons()
 BEGIN
     SELECT * FROM language_icon;

@@ -3,6 +3,7 @@ USE smartcooking;
 
 DELIMITER //
 
+-- This procedure is intended for testing purposes only
 CREATE OR REPLACE PROCEDURE get_all_persons()
 BEGIN
     SELECT person_id, person_name, locale_id

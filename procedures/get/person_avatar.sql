@@ -3,6 +3,7 @@ USE smartcooking;
 
 DELIMITER //
 
+-- This procedure is intended for testing purposes only
 CREATE PROCEDURE get_all_person_avatars()
 BEGIN
     SELECT * FROM person_avatar;
