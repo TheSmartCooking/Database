@@ -1,3 +1,6 @@
+-- Use the database
+USE smartcooking;
+
 DELIMITER //
 
 -- This procedure is intended for testing purposes only
@@ -26,10 +29,24 @@ CREATE PROCEDURE get_all_comments_by_recipe (
     IN p_recipe_id INT
 )
 BEGIN
-    SELECT * FROM comment
-    WHERE recipe_id = p_recipe_id
-    ORDER BY comment_date ASC;
+    SELECT
+        c.*, IFNULL(l.like_count, 0) AS like_count
+    FROM
+        comment c
+    LEFT JOIN (
+        SELECT
+            comment_id, COUNT(*) AS like_count
+        FROM
+            comment_like
+        GROUP BY
+            comment_id
+    ) l ON c.comment_id = l.comment_id
+    WHERE
+        c.recipe_id = p_recipe_id
+    ORDER BY
+        c.comment_date ASC;
 END //
+
 
 CREATE PROCEDURE get_comment_count_by_recipe (
     IN p_recipe_id INT
