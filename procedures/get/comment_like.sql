@@ -17,7 +17,7 @@ BEGIN
     WHERE comment_like_id = p_comment_like_id;
 END //
 
-CREATE PROCEDURE get_all_likes_by_comment (
+CREATE OR REPLACE PROCEDURE get_all_likes_by_comment (
     IN p_comment_id INT
 )
 BEGIN
@@ -33,7 +33,7 @@ BEGIN
         cl.like_id ASC;
 END //
 
-CREATE PROCEDURE get_all_likes_by_person (
+CREATE OR REPLACE PROCEDURE get_all_likes_by_person (
     IN p_person_id INT
 )
 BEGIN

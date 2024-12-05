@@ -3,7 +3,7 @@ USE smartcooking;
 
 DELIMITER //
 
-CREATE PROCEDURE insert_language(
+CREATE OR REPLACE PROCEDURE insert_language(
     IN p_iso_code VARCHAR(2),
     IN p_language_name VARCHAR(30),
     IN p_native_name VARCHAR(30)

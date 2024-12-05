@@ -19,7 +19,7 @@ BEGIN
     AND language_iso_code = language_iso_code;
 END //
 
-CREATE PROCEDURE get_ingredients_translation(
+CREATE OR REPLACE PROCEDURE get_ingredients_translation(
     IN ingredient_ids JSON,
     IN language_iso_code CHAR(2)
 )

@@ -11,7 +11,7 @@ BEGIN
     WHERE person_id = p_person_id;
 END //
 
-CREATE PROCEDURE get_person_settings_analytics()
+CREATE OR REPLACE PROCEDURE get_person_settings_analytics()
 BEGIN
     CREATE TEMPORARY TABLE IF NOT EXISTS temp_settings_count (
         setting_key VARCHAR(100),
