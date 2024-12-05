@@ -79,7 +79,7 @@ BEGIN
     LIMIT p_limit OFFSET p_offset;
 END //
 
-CREATE OR REPLACE PROCEDURE get_recipes_by_tags(
+CREATE OR REPLACE PROCEDURE get_recipes_by_tags_paginated(
     IN p_tags JSON,
     IN p_limit INT,
     IN p_offset INT
@@ -89,6 +89,20 @@ BEGIN
     FROM recipe r
     JOIN recipe_tag rt ON r.recipe_id = rt.recipe_id
     WHERE JSON_CONTAINS(p_tags, JSON_QUOTE(rt.tag))
+    LIMIT p_limit OFFSET p_offset;
+END //
+
+CREATE OR REPLACE PROCEDURE get_recipes_by_name_paginated(
+    IN p_name VARCHAR(255),
+    IN p_limit INT,
+    IN p_offset INT
+)
+BEGIN
+    SET @safe_name = REPLACE(REPLACE(p_name, '%', '\\%'), '_', '\\_');
+
+    SELECT *
+    FROM recipe
+    WHERE name LIKE CONCAT('%', @safe_name, '%') ESCAPE '\\'
     LIMIT p_limit OFFSET p_offset;
 END //
 
