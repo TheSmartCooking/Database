@@ -123,6 +123,19 @@ CREATE OR REPLACE TABLE recipe_engagement (
     UNIQUE (person_id, recipe_id, engagement_type)
 ) ENGINE = InnoDB;
 
+CREATE OR REPLACE TABLE tag (
+    tag_id INT AUTO_INCREMENT PRIMARY KEY,
+    tag_name VARCHAR(25) UNIQUE
+) ENGINE = InnoDB;
+
+CREATE OR REPLACE TABLE recipe_tag (
+    recipe_id INT,
+    tag_id INT,
+    PRIMARY KEY (recipe_id, tag_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipe (recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (tag_id) REFERENCES tag (tag_id) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
 CREATE OR REPLACE TABLE comment (
     comment_id INT AUTO_INCREMENT PRIMARY KEY,
     person_id INT,

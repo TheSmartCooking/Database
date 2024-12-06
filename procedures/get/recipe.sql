@@ -104,11 +104,11 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_name_paginated(
     IN p_offset INT
 )
 BEGIN
-    SET @safe_name = REPLACE(REPLACE(p_name, '%', '\\%'), '_', '\\_');
+    SET @safe_recipe_name = REPLACE(REPLACE(p_name, '%', '\\%'), '_', '\\_');
 
     SELECT *
     FROM recipe
-    WHERE name LIKE CONCAT('%', @safe_name, '%') ESCAPE '\\'
+    WHERE name LIKE CONCAT('%', @safe_recipe_name, '%') ESCAPE '\\'
     LIMIT p_limit OFFSET p_offset;
 END //
 
