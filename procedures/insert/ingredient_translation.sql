@@ -3,7 +3,7 @@ USE smartcooking;
 
 DELIMITER //
 
-CREATE OR REPLACE PROCEDURE insert_ingredient_translation_by_language_id(
+CREATE OR REPLACE PROCEDURE insert_ingredient_translation(
     IN p_language_id INT,
     IN p_translated_name VARCHAR(255)
 )
