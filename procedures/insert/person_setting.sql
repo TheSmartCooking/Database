@@ -5,7 +5,7 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE insert_person_setting(
     IN p_person_id INT,
-    IN p_setting_key INT,
+    IN p_setting_key VARCHAR(100),
     IN p_setting_value VARCHAR(255)
 )
 BEGIN
