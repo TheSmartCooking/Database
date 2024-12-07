@@ -57,7 +57,7 @@ BEGIN
     END IF;
 
     -- Retrieve the hashed password and salt as a result set
-    SELECT hashed_password, salt
+    SELECT person_id, hashed_password, salt
     FROM person
     WHERE email = p_email;
 END //
