@@ -16,7 +16,7 @@ CREATE OR REPLACE TABLE person (
     person_name VARCHAR(100),
     email VARCHAR(100) UNIQUE,
     hashed_password VARCHAR(100),
-    salt VARBINARY(16),
+    salt BINARY(16),
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,
     language_id INT NULL,
@@ -32,21 +32,19 @@ CREATE OR REPLACE TABLE picture (
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE person_avatar (
-    person_id INT NOT NULL,
+    person_id INT NOT NULL UNIQUE,
     avatar_picture_id INT NOT NULL,
     PRIMARY KEY (person_id, avatar_picture_id),
     FOREIGN KEY (person_id) REFERENCES person (person_id) ON DELETE CASCADE,
-    FOREIGN KEY (avatar_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE,
-    UNIQUE (person_id)
+    FOREIGN KEY (avatar_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE lang_icon (
-    language_id INT NOT NULL,
+    language_id INT NOT NULL UNIQUE,
     icon_picture_id INT NOT NULL,
     PRIMARY KEY (language_id, icon_picture_id),
     FOREIGN KEY (language_id) REFERENCES lang (language_id) ON DELETE CASCADE,
-    FOREIGN KEY (icon_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE,
-    UNIQUE (language_id)
+    FOREIGN KEY (icon_picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE person_setting (

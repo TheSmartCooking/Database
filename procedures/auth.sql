@@ -7,7 +7,7 @@ CREATE OR REPLACE PROCEDURE register_person(
     IN p_name VARCHAR(100),
     IN p_email VARCHAR(100),
     IN p_hashed_password VARBINARY(255),
-    IN p_salt VARBINARY(16)
+    IN p_salt BINARY(16)
 )
 BEGIN
     DECLARE name_exists INT;
