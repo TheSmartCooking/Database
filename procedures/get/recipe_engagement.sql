@@ -1,12 +1,15 @@
+-- Use the database
+USE smartcooking;
+
 DELIMITER //
 
 -- This procedure is intended for testing purposes only
-CREATE OR REPLACE PROCEDURE get_all_recipe_engagements ()
+CREATE OR REPLACE PROCEDURE get_all_recipe_engagements()
 BEGIN
     SELECT * FROM recipe_engagement;
 END //
 
-CREATE OR REPLACE PROCEDURE get_engagement_counts_by_recipe (
+CREATE OR REPLACE PROCEDURE get_engagement_counts_by_recipe(
     IN p_recipe_id INT
 )
 BEGIN
@@ -16,7 +19,7 @@ BEGIN
     GROUP BY engagement_type;
 END //
 
-CREATE OR REPLACE PROCEDURE get_all_engagements_by_person (
+CREATE OR REPLACE PROCEDURE get_all_engagements_by_person(
     IN p_person_id INT
 )
 BEGIN
@@ -24,7 +27,7 @@ BEGIN
     WHERE person_id = p_person_id;
 END //
 
-CREATE OR REPLACE PROCEDURE get_all_engagements_by_type (
+CREATE OR REPLACE PROCEDURE get_all_engagements_by_type(
     IN p_engagement_type ENUM('like', 'favorite', 'view')
 )
 BEGIN

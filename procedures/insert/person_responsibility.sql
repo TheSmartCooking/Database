@@ -87,7 +87,7 @@ BEGIN
 
     -- Recipe management
     CALL insert_person_responsibility_by_name(p_person_id, 'can_review_recipe');
-DELIMITER ;
+END //
 
 CREATE OR REPLACE PROCEDURE make_person_administrator(
     IN p_person_id INT
@@ -119,3 +119,5 @@ BEGIN
     CALL insert_person_responsibility_by_name(p_person_id, 'can_edit_translation');
     CALL insert_person_responsibility_by_name(p_person_id, 'can_delete_translation');
 END //
+
+DELIMITER ;

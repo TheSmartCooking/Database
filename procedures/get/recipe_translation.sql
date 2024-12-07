@@ -4,13 +4,13 @@ USE smartcooking;
 DELIMITER //
 
 -- This procedure is intended for testing purposes only
-CREATE OR REPLACE PROCEDURE get_all_recipe_translations ()
+CREATE OR REPLACE PROCEDURE get_all_recipe_translations()
 BEGIN
     SELECT recipe_id, language_id, title, details, preparation
     FROM recipe_translation;
 END //
 
-CREATE OR REPLACE PROCEDURE get_recipe_translation_by_id (
+CREATE OR REPLACE PROCEDURE get_recipe_translation_by_id(
     IN p_recipe_id INT,
     IN p_language_id INT
 )

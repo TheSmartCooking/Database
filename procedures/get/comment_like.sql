@@ -4,12 +4,12 @@ USE smartcooking;
 DELIMITER //
 
 -- This procedure is intended for testing purposes only
-CREATE OR REPLACE PROCEDURE get_all_comment_likes ()
+CREATE OR REPLACE PROCEDURE get_all_comment_likes()
 BEGIN
     SELECT * FROM comment_like;
 END //
 
-CREATE OR REPLACE PROCEDURE get_comment_like_by_id (
+CREATE OR REPLACE PROCEDURE get_comment_like_by_id(
     IN p_comment_like_id INT
 )
 BEGIN
@@ -17,7 +17,7 @@ BEGIN
     WHERE comment_like_id = p_comment_like_id;
 END //
 
-CREATE OR REPLACE PROCEDURE get_all_likes_by_comment (
+CREATE OR REPLACE PROCEDURE get_all_likes_by_comment(
     IN p_comment_id INT
 )
 BEGIN
@@ -33,7 +33,7 @@ BEGIN
         cl.like_id ASC;
 END //
 
-CREATE OR REPLACE PROCEDURE get_all_likes_by_person (
+CREATE OR REPLACE PROCEDURE get_all_likes_by_person(
     IN p_person_id INT
 )
 BEGIN

@@ -7,7 +7,7 @@ CREATE OR REPLACE PROCEDURE insert_recipe_translation(
     IN p_recipe_id INT,
     IN p_language_id INT,
     IN p_title VARCHAR(100),
-    IN p_details TEXT
+    IN p_details TEXT,
     IN p_preparation TEXT
 )
 BEGIN

@@ -6,7 +6,7 @@ DELIMITER //
 CREATE OR REPLACE PROCEDURE insert_recipe_engagement(
     IN p_person_id INT,
     IN p_recipe_id INT,
-    IN p_engagement_type INT
+    IN p_engagement_type VARCHAR(25)
 )
 BEGIN
     INSERT INTO recipe_engagement (person_id, recipe_id, engagement_type)

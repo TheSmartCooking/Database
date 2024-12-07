@@ -4,12 +4,12 @@ USE smartcooking;
 DELIMITER //
 
 -- This procedure is intended for testing purposes only
-CREATE OR REPLACE PROCEDURE get_all_comments ()
+CREATE OR REPLACE PROCEDURE get_all_comments()
 BEGIN
-    SELECT * FROM comment
+    SELECT * FROM comment;
 END //
 
-CREATE OR REPLACE PROCEDURE get_comment_by_id (
+CREATE OR REPLACE PROCEDURE get_comment_by_id(
     IN p_comment_id INT
 )
 BEGIN
@@ -17,7 +17,7 @@ BEGIN
     WHERE comment_id = p_comment_id;
 END //
 
-CREATE OR REPLACE PROCEDURE get_all_comments_by_person (
+CREATE OR REPLACE PROCEDURE get_all_comments_by_person(
     IN p_person_id INT
 )
 BEGIN
@@ -25,7 +25,7 @@ BEGIN
     WHERE person_id = p_person_id;
 END //
 
-CREATE OR REPLACE PROCEDURE get_all_comments_by_recipe (
+CREATE OR REPLACE PROCEDURE get_all_comments_by_recipe(
     IN p_recipe_id INT
 )
 BEGIN
@@ -33,7 +33,7 @@ BEGIN
         c.*, IFNULL(l.like_count, 0) AS like_count
     FROM
         comment c
-    LEFT JOIN (
+    LEFT JOIN(
         SELECT
             comment_id, COUNT(*) AS like_count
         FROM
@@ -48,7 +48,7 @@ BEGIN
 END //
 
 
-CREATE OR REPLACE PROCEDURE get_comment_count_by_recipe (
+CREATE OR REPLACE PROCEDURE get_comment_count_by_recipe(
     IN p_recipe_id INT
 )
 BEGIN
