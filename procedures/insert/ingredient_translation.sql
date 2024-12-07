@@ -9,8 +9,8 @@ CREATE OR REPLACE PROCEDURE insert_ingredient_translation(
     IN p_translated_name VARCHAR(255)
 )
 BEGIN
-    INSERT INTO ingredient_translation (language_id, translated_name)
-    VALUES (p_language_id, p_translated_name);
+    INSERT INTO ingredient_translation (ingredient_id, language_id, translated_name)
+    VALUES (p_ingredient_id, p_language_id, p_translated_name);
 END //
 
 CREATE OR REPLACE PROCEDURE insert_ingredient_translation_by_names(
