@@ -1,29 +1,17 @@
 -- Use the database
 USE smartcooking;
 
-DELIMITER //
-
-CREATE OR REPLACE PROCEDURE insert_language_icon(
-    IN p_language_id INT,
-    IN p_icon_picture_id INT
-)
-BEGIN
-    INSERT INTO lang_icon (language_id, icon_picture_id)
-    VALUES (p_language_id, p_icon_picture_id);
-END //
-
-CREATE OR REPLACE PROCEDURE insert_language_icon_by_iso_code(
-    IN p_iso_code CHAR(2),
-    IN p_icon_picture_id INT
-)
-BEGIN
-    DECLARE v_language_id INT;
-
-    SELECT language_id INTO v_language_id
-    FROM lang
-    WHERE iso_code = p_iso_code;
-
-    CALL insert_language_icon(v_language_id, p_icon_picture_id);
-END //
-
-DELIMITER ;
+-- Fill the database with mock data
+CALL insert_language_icon_by_iso_code('en', 1);
+CALL insert_language_icon_by_iso_code('de', 2);
+CALL insert_language_icon_by_iso_code('fr', 3);
+CALL insert_language_icon_by_iso_code('es', 4);
+CALL insert_language_icon_by_iso_code('it', 5);
+CALL insert_language_icon_by_iso_code('pt', 6);
+CALL insert_language_icon_by_iso_code('nl', 7);
+CALL insert_language_icon_by_iso_code('pl', 8);
+CALL insert_language_icon_by_iso_code('ru', 9);
+CALL insert_language_icon_by_iso_code('zh', 10);
+CALL insert_language_icon_by_iso_code('ja', 11);
+CALL insert_language_icon_by_iso_code('ko', 12);
+CALL insert_language_icon_by_iso_code('ar', 13);
