@@ -9,6 +9,26 @@ BEGIN
     SELECT * FROM recipe;
 END //
 
+CREATE OR REPLACE PROCEDURE get_recipe_by_id(
+    IN p_recipe_id INT
+)
+BEGIN
+    SELECT
+        author_id,
+        publication_date,
+        modification_date,
+        picture_id,
+        cook_time,
+        difficulty_level,
+        number_of_reviews,
+        nutritional_information,
+        source,
+        video_url,
+        recipe_status
+    FROM recipe
+    WHERE recipe_id = p_recipe_id;
+END //
+
 CREATE OR REPLACE PROCEDURE get_all_recipes_paginated(
     IN p_limit INT,
     IN p_offset INT

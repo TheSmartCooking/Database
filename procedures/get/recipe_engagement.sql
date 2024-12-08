@@ -9,6 +9,17 @@ BEGIN
     SELECT * FROM recipe_engagement;
 END //
 
+CREATE OR REPLACE PROCEDURE get_recipe_engagement(IN p_recipe_id INT)
+BEGIN
+    SELECT
+        engagement_id,
+        person_id,
+        engagement_type,
+        engagement_date
+    FROM recipe_engagement
+    WHERE recipe_id = p_recipe_id;
+END //
+
 CREATE OR REPLACE PROCEDURE get_engagement_counts_by_recipe(
     IN p_recipe_id INT
 )

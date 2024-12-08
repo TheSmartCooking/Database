@@ -9,7 +9,7 @@ BEGIN
     SELECT * FROM recipe_ingredient;
 END //
 
-CREATE OR REPLACE PROCEDURE get_ingredients_for_recipe(IN p_recipe_id INT)
+CREATE OR REPLACE PROCEDURE get_recipe_ingredients(IN p_recipe_id INT)
 BEGIN
     SELECT ingredient_id, quantity, unit
     FROM recipe_ingredient
