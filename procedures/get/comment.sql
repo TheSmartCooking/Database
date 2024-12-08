@@ -22,7 +22,7 @@ CREATE OR REPLACE PROCEDURE get_all_comments_by_person(
 )
 BEGIN
     SELECT * FROM comment
-    WHERE person_id = p_person_id;
+    WHERE author_id = p_person_id;
 END //
 
 CREATE OR REPLACE PROCEDURE get_all_comments_by_recipe(
@@ -30,7 +30,7 @@ CREATE OR REPLACE PROCEDURE get_all_comments_by_recipe(
 )
 BEGIN
     SELECT
-        c.*, IFNULL(l.like_count, 0) AS like_count
+        c.comment_id, c.author_id, c.content, c.comment_date, IFNULL(l.like_count, 0) AS like_count
     FROM
         comment c
     LEFT JOIN(
@@ -46,7 +46,6 @@ BEGIN
     ORDER BY
         c.comment_date ASC;
 END //
-
 
 CREATE OR REPLACE PROCEDURE get_comment_count_by_recipe(
     IN p_recipe_id INT

@@ -137,11 +137,11 @@ CREATE OR REPLACE TABLE recipe_tag (
 
 CREATE OR REPLACE TABLE comment (
     comment_id INT AUTO_INCREMENT PRIMARY KEY,
-    person_id INT,
+    author_id INT,
     recipe_id INT,
-    comment TEXT,
+    content TEXT,
     comment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (person_id) REFERENCES person (person_id) ON DELETE CASCADE,
+    FOREIGN KEY (author_id) REFERENCES person (person_id) ON DELETE CASCADE,
     FOREIGN KEY (recipe_id) REFERENCES recipe (recipe_id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
