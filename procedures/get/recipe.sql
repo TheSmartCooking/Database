@@ -37,13 +37,14 @@ CREATE OR REPLACE PROCEDURE get_all_recipes_paginated(
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
     SET p_limit = LEAST(p_limit, max_limit);
+    DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
 
     SELECT r.*, rt.title, rt.details, rt.preparation, rt.nutritional_information, rt.video_url
     FROM recipe r
     INNER JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
     INNER JOIN lang l ON rt.language_id = l.language_id
     WHERE l.iso_code = p_language_iso_code
-    LIMIT p_limit OFFSET p_offset;
+    LIMIT p_limit OFFSET v_offset;
 END //
 
 CREATE OR REPLACE PROCEDURE get_recipes_by_author_paginated(
@@ -55,6 +56,7 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_author_paginated(
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
     SET p_limit = LEAST(p_limit, max_limit);
+    DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
 
     SELECT
         r.recipe_id,
@@ -79,7 +81,7 @@ BEGIN
     INNER JOIN lang l ON rt.language_id = l.language_id
     WHERE r.author_id = p_author_id
       AND l.iso_code = p_language_iso_code
-    LIMIT p_limit OFFSET p_offset;
+    LIMIT p_limit OFFSET v_offset;
 END //
 
 CREATE OR REPLACE PROCEDURE get_top_rated_recipes_paginated(
@@ -91,6 +93,7 @@ CREATE OR REPLACE PROCEDURE get_top_rated_recipes_paginated(
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
     SET p_limit = LEAST(p_limit, max_limit);
+    DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
 
     SELECT
         r.*,
@@ -108,7 +111,7 @@ BEGIN
     GROUP BY r.recipe_id
     HAVING average_rating >= p_min_rating
     ORDER BY average_rating DESC
-    LIMIT p_limit OFFSET p_offset;
+    LIMIT p_limit OFFSET v_offset;
 END //
 
 CREATE OR REPLACE PROCEDURE get_recipes_liked_by_person_paginated(
@@ -136,6 +139,7 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_category_paginated(
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
     SET p_limit = LEAST(p_limit, max_limit);
+    DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
 
     SELECT r.*, rt.title, rt.details, rt.preparation, rt.nutritional_information, rt.video_url
     FROM recipe r
@@ -144,7 +148,7 @@ BEGIN
     JOIN lang l ON rt.language_id = l.language_id
     WHERE rc.category_id = p_category_id
       AND l.iso_code = p_language_iso_code
-    LIMIT p_limit OFFSET p_offset;
+    LIMIT p_limit OFFSET v_offset;
 END //
 
 CREATE OR REPLACE PROCEDURE get_recipes_by_tags_paginated(
@@ -156,6 +160,7 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_tags_paginated(
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
     SET p_limit = LEAST(p_limit, max_limit);
+    DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
 
     SELECT r.*, rt.title, rt.details, rt.preparation, rt.nutritional_information, rt.video_url
     FROM recipe r
@@ -164,7 +169,7 @@ BEGIN
     JOIN lang l ON rt.language_id = l.language_id
     WHERE JSON_CONTAINS(p_tags, JSON_QUOTE(rtg.tag))
       AND l.iso_code = p_language_iso_code
-    LIMIT p_limit OFFSET p_offset;
+    LIMIT p_limit OFFSET v_offset;
 END //
 
 CREATE OR REPLACE PROCEDURE get_recipes_by_name_paginated(
@@ -176,6 +181,7 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_name_paginated(
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
     SET p_limit = LEAST(p_limit, max_limit);
+    DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
 
     SET @safe_recipe_name = REPLACE(REPLACE(p_name, '%', '\\%'), '_', '\\_');
 
@@ -185,7 +191,7 @@ BEGIN
     JOIN lang l ON rt.language_id = l.language_id
     WHERE r.name LIKE CONCAT('%', @safe_recipe_name, '%') ESCAPE '\\'
       AND l.iso_code = p_language_iso_code
-    LIMIT p_limit OFFSET p_offset;
+    LIMIT p_limit OFFSET v_offset;
 END //
 
 DELIMITER ;
