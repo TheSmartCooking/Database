@@ -33,7 +33,7 @@ BEGIN
         (SELECT COUNT(*) FROM comment c WHERE c.person_id = p.person_id) AS total_comments,
         (SELECT COUNT(*)
          FROM comment_like cl
-         JOIN comment c ON cl.comment_id = c.comment_id
+         INNER JOIN comment c ON cl.comment_id = c.comment_id
          WHERE c.person_id = p.person_id) AS total_comment_likes_received
     FROM person p
     WHERE p.person_id = p_person_id;

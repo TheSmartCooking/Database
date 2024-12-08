@@ -92,9 +92,7 @@ CREATE OR REPLACE TABLE recipe (
     cook_time INT UNSIGNED NULL,
     difficulty_level TINYINT CHECK (difficulty_level BETWEEN 1 AND 3),
     number_of_reviews INT NULL,
-    nutritional_information TEXT NULL,
     source VARCHAR(255) NULL,
-    video_url VARCHAR(255) NULL,
     recipe_status ENUM('draft', 'published', 'hidden', 'archived', 'pending review', 'rejected', 'scheduled', 'needs update', 'unlisted', 'deleted') NOT NULL DEFAULT 'draft',
     FOREIGN KEY (author_id) REFERENCES person (person_id) ON DELETE CASCADE,
     FOREIGN KEY (picture_id) REFERENCES picture (picture_id) ON DELETE SET NULL
@@ -116,6 +114,8 @@ CREATE OR REPLACE TABLE recipe_translation (
     title VARCHAR(255),
     details TEXT,
     preparation TEXT,
+    nutritional_information TEXT NULL,
+    video_url VARCHAR(255) NULL,
     PRIMARY KEY (recipe_id, language_id),
     FOREIGN KEY (recipe_id) REFERENCES recipe (recipe_id) ON DELETE CASCADE,
     FOREIGN KEY (language_id) REFERENCES lang (language_id) ON DELETE CASCADE

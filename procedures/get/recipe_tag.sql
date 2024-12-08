@@ -14,7 +14,7 @@ CREATE OR REPLACE PROCEDURE get_recipe_tags(IN p_recipe_id INT)
 BEGIN
     SELECT rt.tag_id, t.tag_name
     FROM recipe_tag rt
-    JOIN tag t ON rt.tag_id = t.tag_id
+    INNER JOIN tag t ON rt.tag_id = t.tag_id
     WHERE recipe_id = p_recipe_id;
 END //
 
