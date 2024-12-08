@@ -25,4 +25,5 @@ BEGIN
 
     CALL insert_language_icon(v_language_id, p_icon_picture_id);
 END //
+
 DELIMITER ;

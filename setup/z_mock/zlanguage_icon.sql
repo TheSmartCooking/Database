@@ -11,7 +11,3 @@ CALL insert_language_icon_by_iso_code('pt', 6);
 CALL insert_language_icon_by_iso_code('nl', 7);
 CALL insert_language_icon_by_iso_code('pl', 8);
 CALL insert_language_icon_by_iso_code('ru', 9);
-CALL insert_language_icon_by_iso_code('zh', 10);
-CALL insert_language_icon_by_iso_code('ja', 11);
-CALL insert_language_icon_by_iso_code('ko', 12);
-CALL insert_language_icon_by_iso_code('ar', 13);

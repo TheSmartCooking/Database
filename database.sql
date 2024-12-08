@@ -25,8 +25,9 @@ CREATE OR REPLACE TABLE person (
 
 CREATE OR REPLACE TABLE picture (
     picture_id INT AUTO_INCREMENT PRIMARY KEY,
-    picture_path VARCHAR(50) UNIQUE,
+    picture_path VARCHAR(65) UNIQUE,
     author_id INT NULL,
+    creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     picture_type ENUM('avatar', 'recipe', 'language_icon') NOT NULL,
     FOREIGN KEY (author_id) REFERENCES person (person_id) ON DELETE SET NULL
 ) ENGINE = InnoDB;
