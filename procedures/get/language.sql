@@ -27,8 +27,9 @@ CREATE OR REPLACE PROCEDURE get_languages_with_users()
 BEGIN
     SELECT l.language_id, l.iso_code, l.english_name, COUNT(p.person_id) AS user_count
     FROM lang l
-    LEFT JOIN person p ON l.language_id = p.language_id
-    GROUP BY l.language_id, l.iso_code, l.english_name;
+    INNER JOIN person p ON l.language_id = p.language_id
+    GROUP BY l.language_id, l.iso_code, l.english_name
+    HAVING user_count > 0;
 END //
 
 CREATE OR REPLACE PROCEDURE get_languages_with_ingredient_translations()
@@ -47,7 +48,7 @@ BEGIN
     GROUP BY l.language_id, l.iso_code, l.english_name;
 END //
 
-CREATE OR REPLACE PROCEDURE get_language_usage_statistics()
+CREATE OR REPLACE PROCEDURE get_languages_usage_statistics()
 BEGIN
     SELECT
         l.language_id,
@@ -56,7 +57,8 @@ BEGIN
         (SELECT COUNT(p.person_id) FROM person p WHERE p.language_id = l.language_id) AS user_count,
         (SELECT COUNT(it.ingredient_id) FROM ingredient_translation it WHERE it.language_id = l.language_id) AS ingredient_translation_count,
         (SELECT COUNT(rt.recipe_id) FROM recipe_translation rt WHERE rt.language_id = l.language_id) AS recipe_translation_count
-    FROM lang l;
+    FROM lang l
+    HAVING user_count > 0 OR ingredient_translation_count > 0 OR recipe_translation_count > 0;
 END //
 
 DELIMITER ;
