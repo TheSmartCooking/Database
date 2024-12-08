@@ -31,21 +31,29 @@ END //
 
 CREATE OR REPLACE PROCEDURE get_all_recipes_paginated(
     IN p_limit INT,
-    IN p_offset INT
+    IN p_offset INT,
+    IN p_language_iso_code CHAR(2)
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
     SET p_limit = LEAST(p_limit, max_limit);
 
-    SELECT *
-    FROM recipe
+    SELECT r.*,
+           rt.title,
+           rt.details,
+           rt.preparation
+    FROM recipe r
+    INNER JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
+    INNER JOIN lang l ON rt.language_id = l.language_id
+    WHERE l.iso_code = p_language_iso_code
     LIMIT p_limit OFFSET p_offset;
 END //
 
 CREATE OR REPLACE PROCEDURE get_recipes_by_author_paginated(
     IN p_author_id INT,
     IN p_limit INT,
-    IN p_offset INT
+    IN p_offset INT,
+    IN language_iso_code CHAR(2)
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
@@ -60,7 +68,8 @@ END //
 CREATE OR REPLACE PROCEDURE get_top_rated_recipes_paginated(
     IN p_min_rating TINYINT,
     IN p_limit INT,
-    IN p_offset INT
+    IN p_offset INT,
+    IN language_iso_code CHAR(2)
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
@@ -78,7 +87,8 @@ END //
 CREATE OR REPLACE PROCEDURE get_recipes_liked_by_person_paginated(
     IN p_person_id INT,
     IN p_limit INT,
-    IN p_offset INT
+    IN p_offset INT,
+    IN language_iso_code CHAR(2)
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
@@ -94,7 +104,8 @@ END //
 CREATE OR REPLACE PROCEDURE get_recipes_by_language_paginated(
     IN p_language_id INT,
     IN p_limit INT,
-    IN p_offset INT
+    IN p_offset INT,
+    IN language_iso_code CHAR(2)
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
@@ -110,7 +121,8 @@ END //
 CREATE OR REPLACE PROCEDURE get_recipes_by_category_paginated(
     IN p_category_id INT,
     IN p_limit INT,
-    IN p_offset INT
+    IN p_offset INT,
+    IN language_iso_code CHAR(2)
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
@@ -126,7 +138,8 @@ END //
 CREATE OR REPLACE PROCEDURE get_recipes_by_tags_paginated(
     IN p_tags JSON,
     IN p_limit INT,
-    IN p_offset INT
+    IN p_offset INT,
+    IN language_iso_code CHAR(2)
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
@@ -142,7 +155,8 @@ END //
 CREATE OR REPLACE PROCEDURE get_recipes_by_name_paginated(
     IN p_name VARCHAR(255),
     IN p_limit INT,
-    IN p_offset INT
+    IN p_offset INT,
+    IN language_iso_code CHAR(2)
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
