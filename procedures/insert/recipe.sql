@@ -8,9 +8,7 @@ CREATE OR REPLACE PROCEDURE insert_recipe(
     IN picture_id INT,
     IN cook_time INT,
     IN difficulty_level TINYINT,
-    IN nutritional_information TEXT,
     IN source VARCHAR(255),
-    IN video_url VARCHAR(255),
     IN recipe_status VARCHAR(20)
 )
 BEGIN
@@ -18,8 +16,8 @@ BEGIN
         SET recipe_status = 'pending review';
     END IF;
 
-    INSERT INTO recipe (author_id, picture_id, cook_time, difficulty_level, nutritional_information, source, video_url, recipe_status)
-    VALUES (author_id, picture_id, cook_time, difficulty_level, nutritional_information, source, video_url, recipe_status);
+    INSERT INTO recipe (author_id, picture_id, cook_time, difficulty_level, source, recipe_status)
+    VALUES (author_id, picture_id, cook_time, difficulty_level, source, recipe_status);
 END //
 
 DELIMITER ;
