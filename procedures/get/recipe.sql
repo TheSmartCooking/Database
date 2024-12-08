@@ -36,8 +36,8 @@ CREATE OR REPLACE PROCEDURE get_all_recipes_paginated(
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
-    SET p_limit = LEAST(p_limit, max_limit);
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
+    SET p_limit = LEAST(p_limit, max_limit);
 
     SELECT r.*, rt.title, rt.details, rt.preparation, rt.nutritional_information, rt.video_url
     FROM recipe r
@@ -55,8 +55,8 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_author_paginated(
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
-    SET p_limit = LEAST(p_limit, max_limit);
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
+    SET p_limit = LEAST(p_limit, max_limit);
 
     SELECT
         r.recipe_id,
@@ -92,8 +92,8 @@ CREATE OR REPLACE PROCEDURE get_top_rated_recipes_paginated(
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
-    SET p_limit = LEAST(p_limit, max_limit);
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
+    SET p_limit = LEAST(p_limit, max_limit);
 
     SELECT
         r.*,
@@ -121,13 +121,14 @@ CREATE OR REPLACE PROCEDURE get_recipes_liked_by_person_paginated(
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
+    DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
     SET p_limit = LEAST(p_limit, max_limit);
 
     SELECT r.*
     FROM recipe r
     INNER JOIN recipe_engagement re ON r.recipe_id = re.recipe_id
     WHERE re.person_id = p_person_id AND re.engagement_type = 'like'
-    LIMIT p_limit OFFSET p_offset;
+    LIMIT p_limit OFFSET v_offset;
 END //
 
 CREATE OR REPLACE PROCEDURE get_recipes_by_category_paginated(
@@ -138,8 +139,8 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_category_paginated(
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
-    SET p_limit = LEAST(p_limit, max_limit);
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
+    SET p_limit = LEAST(p_limit, max_limit);
 
     SELECT r.*, rt.title, rt.details, rt.preparation, rt.nutritional_information, rt.video_url
     FROM recipe r
@@ -159,8 +160,8 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_tags_paginated(
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
-    SET p_limit = LEAST(p_limit, max_limit);
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
+    SET p_limit = LEAST(p_limit, max_limit);
 
     SELECT r.*, rt.title, rt.details, rt.preparation, rt.nutritional_information, rt.video_url
     FROM recipe r
@@ -180,8 +181,8 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_name_paginated(
 )
 BEGIN
     DECLARE max_limit INT DEFAULT 30;
-    SET p_limit = LEAST(p_limit, max_limit);
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
+    SET p_limit = LEAST(p_limit, max_limit);
 
     SET @safe_recipe_name = REPLACE(REPLACE(p_name, '%', '\\%'), '_', '\\_');
 
