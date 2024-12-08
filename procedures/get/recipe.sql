@@ -34,6 +34,9 @@ CREATE OR REPLACE PROCEDURE get_all_recipes_paginated(
     IN p_offset INT
 )
 BEGIN
+    DECLARE max_limit INT DEFAULT 30;
+    SET p_limit = LEAST(p_limit, max_limit);
+
     SELECT *
     FROM recipe
     LIMIT p_limit OFFSET p_offset;
@@ -45,6 +48,9 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_author_paginated(
     IN p_offset INT
 )
 BEGIN
+    DECLARE max_limit INT DEFAULT 30;
+    SET p_limit = LEAST(p_limit, max_limit);
+
     SELECT *
     FROM recipe
     WHERE author_id = p_author_id
@@ -57,6 +63,9 @@ CREATE OR REPLACE PROCEDURE get_top_rated_recipes_paginated(
     IN p_offset INT
 )
 BEGIN
+    DECLARE max_limit INT DEFAULT 30;
+    SET p_limit = LEAST(p_limit, max_limit);
+
     SELECT r.recipe_id, r.author_id, r.publication_date, AVG(rr.rating) AS average_rating
     FROM recipe r
     JOIN recipe_rating rr ON r.recipe_id = rr.recipe_id
@@ -72,6 +81,9 @@ CREATE OR REPLACE PROCEDURE get_recipes_liked_by_person_paginated(
     IN p_offset INT
 )
 BEGIN
+    DECLARE max_limit INT DEFAULT 30;
+    SET p_limit = LEAST(p_limit, max_limit);
+
     SELECT r.*
     FROM recipe r
     JOIN recipe_engagement re ON r.recipe_id = re.recipe_id
@@ -85,6 +97,9 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_language_paginated(
     IN p_offset INT
 )
 BEGIN
+    DECLARE max_limit INT DEFAULT 30;
+    SET p_limit = LEAST(p_limit, max_limit);
+
     SELECT r.*
     FROM recipe r
     JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
@@ -98,6 +113,9 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_category_paginated(
     IN p_offset INT
 )
 BEGIN
+    DECLARE max_limit INT DEFAULT 30;
+    SET p_limit = LEAST(p_limit, max_limit);
+
     SELECT r.*
     FROM recipe r
     JOIN recipe_category rc ON r.recipe_id = rc.recipe_id
@@ -111,6 +129,9 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_tags_paginated(
     IN p_offset INT
 )
 BEGIN
+    DECLARE max_limit INT DEFAULT 30;
+    SET p_limit = LEAST(p_limit, max_limit);
+
     SELECT r.*
     FROM recipe r
     JOIN recipe_tag rt ON r.recipe_id = rt.recipe_id
@@ -124,6 +145,9 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_name_paginated(
     IN p_offset INT
 )
 BEGIN
+    DECLARE max_limit INT DEFAULT 30;
+    SET p_limit = LEAST(p_limit, max_limit);
+
     SET @safe_recipe_name = REPLACE(REPLACE(p_name, '%', '\\%'), '_', '\\_');
 
     SELECT *
