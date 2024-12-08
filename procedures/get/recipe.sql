@@ -39,7 +39,7 @@ BEGIN
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
     SET p_limit = LEAST(p_limit, max_limit);
 
-    SELECT r.*, rt.title, rt.details, rt.preparation, rt.nutritional_information, rt.video_url
+    SELECT r.*, rt.title
     FROM recipe r
     INNER JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
     INNER JOIN lang l ON rt.language_id = l.language_id
@@ -72,10 +72,6 @@ BEGIN
         r.recipe_status,
         r.category_id,
         rt.title,
-        rt.details,
-        rt.preparation,
-        rt.nutritional_information,
-        rt.video_url
     FROM recipe r
     INNER JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
     INNER JOIN lang l ON rt.language_id = l.language_id
@@ -95,14 +91,7 @@ BEGIN
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
     SET p_limit = LEAST(p_limit, max_limit);
 
-    SELECT
-        r.*,
-        AVG(rr.rating) AS average_rating,
-        rt.title,
-        rt.details,
-        rt.preparation,
-        rt.nutritional_information,
-        rt.video_url
+    SELECT r.*, AVG(rr.rating) AS average_rating, rt.title,
     FROM recipe r
     INNER JOIN recipe_rating rr ON r.recipe_id = rr.recipe_id
     INNER JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
@@ -142,7 +131,7 @@ BEGIN
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
     SET p_limit = LEAST(p_limit, max_limit);
 
-    SELECT r.*, rt.title, rt.details, rt.preparation, rt.nutritional_information, rt.video_url
+    SELECT r.*, rt.title
     FROM recipe r
     JOIN recipe_category rc ON r.recipe_id = rc.recipe_id
     JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
@@ -163,7 +152,7 @@ BEGIN
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
     SET p_limit = LEAST(p_limit, max_limit);
 
-    SELECT r.*, rt.title, rt.details, rt.preparation, rt.nutritional_information, rt.video_url
+    SELECT r.*, rt.title
     FROM recipe r
     JOIN recipe_tag rtg ON r.recipe_id = rtg.recipe_id
     JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
@@ -186,7 +175,7 @@ BEGIN
 
     SET @safe_recipe_name = REPLACE(REPLACE(p_name, '%', '\\%'), '_', '\\_');
 
-    SELECT r.*, rt.title, rt.details, rt.preparation, rt.nutritional_information, rt.video_url
+    SELECT r.*, rt.title
     FROM recipe r
     JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
     JOIN lang l ON rt.language_id = l.language_id
