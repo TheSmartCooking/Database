@@ -11,14 +11,14 @@ END //
 
 CREATE OR REPLACE PROCEDURE get_language_by_id(IN p_language_id INT)
 BEGIN
-    SELECT language_id, iso_code, english_name
+    SELECT iso_code, english_name, native_name
     FROM lang
     WHERE language_id = p_language_id;
 END //
 
 CREATE OR REPLACE PROCEDURE get_language_by_code(IN p_iso_code VARCHAR(10))
 BEGIN
-    SELECT language_id, iso_code, english_name
+    SELECT language_id, english_name, native_name
     FROM lang
     WHERE iso_code = p_iso_code;
 END //
@@ -31,7 +31,7 @@ BEGIN
     GROUP BY l.language_id, l.iso_code, l.english_name;
 END //
 
-CREATE OR REPLACE PROCEDURE get_languages_with_translations()
+CREATE OR REPLACE PROCEDURE get_languages_with_ingredient_translations()
 BEGIN
     SELECT l.language_id, l.iso_code, l.english_name, COUNT(it.ingredient_id) AS translated_ingredients_count
     FROM lang l
