@@ -21,7 +21,7 @@ CREATE OR REPLACE PROCEDURE get_all_comments_by_person(
     IN p_person_id INT
 )
 BEGIN
-    SELECT * FROM comment
+    SELECT comment_id, recipe_id, content, comment_date FROM comment
     WHERE author_id = p_person_id;
 END //
 
