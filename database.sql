@@ -25,7 +25,7 @@ CREATE OR REPLACE TABLE person (
 
 CREATE OR REPLACE TABLE picture (
     picture_id INT AUTO_INCREMENT PRIMARY KEY,
-    picture_path VARCHAR(255) UNIQUE,
+    picture_path VARCHAR(50) UNIQUE,
     author_id INT NULL,
     picture_type ENUM('avatar', 'recipe', 'language_icon') NOT NULL,
     FOREIGN KEY (author_id) REFERENCES person (person_id) ON DELETE SET NULL
