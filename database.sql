@@ -100,6 +100,16 @@ CREATE OR REPLACE TABLE recipe (
     FOREIGN KEY (picture_id) REFERENCES picture (picture_id) ON DELETE SET NULL
 ) ENGINE = InnoDB;
 
+CREATE OR REPLACE TABLE recipe_ingredient (
+    recipe_id INT,
+    ingredient_id INT,
+    quantity DECIMAL(10, 2),
+    unit VARCHAR(10),
+    PRIMARY KEY (recipe_id, ingredient_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipe (recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (ingredient_id) REFERENCES ingredient (ingredient_id) ON DELETE CASCADE
+) ENGINE = InnoDB;
+
 CREATE OR REPLACE TABLE recipe_translation (
     recipe_id INT,
     language_id INT,
