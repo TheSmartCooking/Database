@@ -35,7 +35,7 @@ The database schema consists of the following tables:
 3. **responsibility**: Stores responsibilities associated with users.
 4. **person_responsibility**: Defines a many-to-many relationship between persons and responsibilities.
 5. **status**: Defines status options for recipes.
-6. **locale**: Stores locale information for translations.
+6. **language_code**: Stores language information for translations.
 7. **recipe**: Represents individual recipes with details like author, cook time, and difficulty level.
 8. **recipe_translation**: Stores translations of recipe details in different languages.
 9. **tag**: Contains tags associated with recipes.

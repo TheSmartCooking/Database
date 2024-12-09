@@ -1,22 +1,30 @@
 # Use MariaDB version 11.5.2 as the base image
 FROM mariadb:11.5.2
 
-# Create a new user and group with limited privileges
+# Set environment variables
+ENV TEMP_SQL_DIR=/temp-sql-files
+
+# Set the shell for safer execution
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Create a non-root user and group
 RUN groupadd -r dbuser && useradd -r -g dbuser dbuser
 
-# Copy SQL files from the repository root into the container
-COPY create_database.sql /docker-entrypoint-initdb.d/
-COPY create_tables.sql /docker-entrypoint-initdb.d/
-COPY create_get_procedures.sql /docker-entrypoint-initdb.d/
-COPY create_insert_procedures.sql /docker-entrypoint-initdb.d/
-COPY create_update_procedures.sql /docker-entrypoint-initdb.d/
-COPY create_delete_procedures.sql /docker-entrypoint-initdb.d/
+# Copy all files into a temporary location
+COPY . ${TEMP_SQL_DIR}/
 
-# Add sample data to the database
-COPY sample_data.sql /docker-entrypoint-initdb.d/
+# Flatten the directory structure and rename files to include folder names
+RUN find "${TEMP_SQL_DIR:?}/" -type f -name "*.sql" | while read -r file; do \
+    new_name=$(echo "$file" | sed "s|${TEMP_SQL_DIR:?}/||" | sed 's|/|_|g' | sed 's|^_||'); \
+    cp "$file" "/docker-entrypoint-initdb.d/$new_name"; \
+    done && \
+    rm -rf "${TEMP_SQL_DIR:?}/"
+
+# Set ownership
+RUN chown -R dbuser:dbuser /docker-entrypoint-initdb.d
 
 # Adjust permissions on the MySQL data directory
-RUN chown -R dbuser:dbuser /var/lib/mysql
+RUN chown -R dbuser:dbuser /var/lib/mysql /etc/mysql
 
 # Expose the default MariaDB port (3306)
 EXPOSE 3306

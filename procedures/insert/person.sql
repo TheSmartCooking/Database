@@ -1,0 +1,1 @@
+-- The person insertions are managed by the authentication system.
