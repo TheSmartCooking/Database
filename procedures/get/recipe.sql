@@ -236,10 +236,10 @@ BEGIN
         r.recipe_status,
         rt.title
     FROM recipe r
-    JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
-    JOIN lang l ON rt.language_id = l.language_id
+    INNER JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
+    INNER JOIN lang l ON rt.language_id = l.language_id
     INNER JOIN person p ON r.author_id = p.person_id
-    WHERE r.name LIKE CONCAT('%', @safe_recipe_name, '%') ESCAPE '\\'
+    WHERE rt.title LIKE CONCAT('%', @safe_recipe_name, '%') ESCAPE '\\'
       AND l.iso_code = p_language_iso_code
     LIMIT p_limit OFFSET v_offset;
 END //
