@@ -3,22 +3,22 @@ USE smartcooking;
 
 DELIMITER //
 
-CREATE FUNCTION sanitize_string(p_keyword VARCHAR(255))
+CREATE FUNCTION sanitize_string(p_string VARCHAR(255))
 RETURNS VARCHAR(255)
 DETERMINISTIC
 BEGIN
-  DECLARE safe_keyword VARCHAR(255);
+  DECLARE safe_string VARCHAR(255);
 
   -- Escape SQL special characters
-  SET safe_keyword = REPLACE(p_keyword, '\\', '\\\\'); -- Escape backslash
-  SET safe_keyword = REPLACE(safe_keyword, '%', '\\%'); -- Escape percent
-  SET safe_keyword = REPLACE(safe_keyword, '_', '\\_'); -- Escape underscore
-  SET safe_keyword = REPLACE(safe_keyword, '\'', '\\\''); -- Escape single quote
-  SET safe_keyword = REPLACE(safe_keyword, '"', '\\"'); -- Escape double quote
-  SET safe_keyword = REPLACE(safe_keyword, ';', '\\;'); -- Escape semicolon
+  SET safe_string = REPLACE(p_string, '\\', '\\\\'); -- Escape backslash
+  SET safe_string = REPLACE(safe_string, '%', '\\%'); -- Escape percent
+  SET safe_string = REPLACE(safe_string, '_', '\\_'); -- Escape underscore
+  SET safe_string = REPLACE(safe_string, '\'', '\\\''); -- Escape single quote
+  SET safe_string = REPLACE(safe_string, '"', '\\"'); -- Escape double quote
+  SET safe_string = REPLACE(safe_string, ';', '\\;'); -- Escape semicolon
 
-  -- Return the safe keyword with wildcards added
-  RETURN CONCAT('%', safe_keyword, '%');
+  -- Return the safe string with wildcards added
+  RETURN CONCAT('%', safe_string, '%');
 END //
 
 DELIMITER ;
