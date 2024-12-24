@@ -23,12 +23,12 @@ END //
 
 CREATE OR REPLACE PROCEDURE get_tags_by_name(IN p_tag_name VARCHAR(25))
 BEGIN
-    DECLARE safe_tag_name VARCHAR(255);
-    SET safe_tag_name = sanitize_string(p_tag_name);
+    DECLARE v_safe_tag_name VARCHAR(255);
+    SET v_safe_tag_name = sanitize_string(p_tag_name);
 
     SELECT *
     FROM tag
-    WHERE tag_name LIKE safe_tag_name ESCAPE '\\';
+    WHERE tag_name LIKE v_safe_tag_name ESCAPE '\\';
 END //
 
 DELIMITER ;
