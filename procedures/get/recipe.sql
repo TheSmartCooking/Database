@@ -223,7 +223,8 @@ BEGIN
     DECLARE v_offset INT DEFAULT (p_offset - 1) * p_limit;
     SET p_limit = LEAST(p_limit, max_limit);
 
-    SET @safe_recipe_name = REPLACE(REPLACE(p_name, '%', '\\%'), '_', '\\_');
+    DECLARE safe_recipe_name VARCHAR(255);
+    SET safe_recipe_name = sanitize_string(p_name);
 
     SELECT
         r.recipe_id,
@@ -239,7 +240,7 @@ BEGIN
     INNER JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
     INNER JOIN lang l ON rt.language_id = l.language_id
     INNER JOIN person p ON r.author_id = p.person_id
-    WHERE rt.title LIKE CONCAT('%', @safe_recipe_name, '%') ESCAPE '\\'
+    WHERE rt.title LIKE safe_recipe_name ESCAPE '\\'
       AND l.iso_code = p_language_iso_code
     LIMIT p_limit OFFSET v_offset;
 END //
