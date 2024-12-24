@@ -6,20 +6,32 @@ DELIMITER //
 -- This procedure is intended for testing purposes only
 CREATE OR REPLACE PROCEDURE get_all_persons()
 BEGIN
-    SELECT person_id, person_name, language_id
+    SELECT
+        person_id,
+        person_name,
+        language_id,
+        mask_email(email) AS masked_email
     FROM person;
 END //
 
 CREATE OR REPLACE PROCEDURE get_person_by_id(IN p_person_id INT)
 BEGIN
-    SELECT person_id, person_name, language_id
+    SELECT
+        person_id,
+        person_name,
+        language_id,
+        mask_email(email) AS masked_email
     FROM person
     WHERE person_id = p_person_id;
 END //
 
 CREATE OR REPLACE PROCEDURE get_person_by_email(IN p_email VARCHAR(100))
 BEGIN
-    SELECT person_id, person_name, language_id
+    SELECT
+        person_id,
+        person_name,
+        language_id,
+        mask_email(email) AS masked_email
     FROM person
     WHERE email = p_email;
 END //
@@ -29,7 +41,7 @@ BEGIN
     SELECT
         p.person_id,
         p.name,
-        p.email,
+        mask_email(p.email) AS masked_email,
         (SELECT COUNT(*) FROM comment c WHERE c.person_id = p.person_id) AS total_comments,
         (SELECT COUNT(*)
          FROM comment_like cl
