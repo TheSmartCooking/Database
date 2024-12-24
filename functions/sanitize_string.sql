@@ -1,3 +1,8 @@
+-- Use the database
+USE smartcooking;
+
+DELIMITER //
+
 CREATE FUNCTION sanitize_string(p_keyword VARCHAR(255))
 RETURNS VARCHAR(255)
 DETERMINISTIC
@@ -10,4 +15,6 @@ BEGIN
 
   -- Return the safe keyword with wildcards added
   RETURN CONCAT('%', safe_keyword, '%');
-END;
+END //
+
+DELIMITER ;
