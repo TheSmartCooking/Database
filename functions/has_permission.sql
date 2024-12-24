@@ -3,7 +3,7 @@ USE smartcooking;
 
 DELIMITER //
 
-CREATE OR REPLACE FUNCTION has_permission(p_user_id INT, p_permission_name VARCHAR(50))
+CREATE OR REPLACE FUNCTION has_permission(p_person_id INT, p_responsibility_id INT)
 RETURNS BOOLEAN
 DETERMINISTIC
 BEGIN
@@ -11,8 +11,8 @@ BEGIN
     SELECT COUNT(*)
     INTO result
     FROM person_responsibility
-    WHERE user_id = p_user_id AND responsibility_name = p_permission_name;
+    WHERE person_id = p_person_id AND responsibility_id = p_responsibility_id;
     RETURN result > 0;
-END;
+END //
 
 DELIMITER ;
