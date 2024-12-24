@@ -27,7 +27,7 @@ END //
 
 CREATE OR REPLACE PROCEDURE get_person_by_email(IN p_email VARCHAR(100))
 BEGIN
-    SELECT person_id, person_name, language_id,
+    SELECT person_id, person_name, language_id
     FROM person
     WHERE email = p_email;
 END //
