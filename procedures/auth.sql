@@ -11,25 +11,25 @@ CREATE OR REPLACE PROCEDURE register_person(
     IN p_language_iso_code CHAR(2)
 )
 BEGIN
-    DECLARE name_exists INT;
-    DECLARE email_exists INT;
+    DECLARE v_name_exists INT;
+    DECLARE v_email_exists INT;
     DECLARE v_language_id INT;
 
     -- Check if the person name already exists
-    SELECT COUNT(*) INTO name_exists
+    SELECT COUNT(*) INTO v_name_exists
     FROM person
     WHERE person_name = p_name;
 
-    IF name_exists > 0 THEN
+    IF v_name_exists > 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User name already exists';
     END IF;
 
     -- Check if the email already exists
-    SELECT COUNT(*) INTO email_exists
+    SELECT COUNT(*) INTO v_email_exists
     FROM person
     WHERE email = p_email;
 
-    IF email_exists > 0 THEN
+    IF v_email_exists > 0 THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email already exists';
     END IF;
 
