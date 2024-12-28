@@ -59,12 +59,14 @@ CREATE OR REPLACE TABLE person_setting (
 
 CREATE OR REPLACE TABLE responsibility (
     responsibility_id INT AUTO_INCREMENT PRIMARY KEY,
-    responsibility_name VARCHAR(100) UNIQUE
+    responsibility_name VARCHAR(100) UNIQUE,
+    responsibility_description TEXT
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE person_responsibility (
     person_id INT,
     responsibility_id INT,
+    granted_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (person_id, responsibility_id),
     FOREIGN KEY (person_id) REFERENCES person (person_id) ON DELETE CASCADE,
     FOREIGN KEY (responsibility_id) REFERENCES responsibility (responsibility_id) ON DELETE CASCADE
