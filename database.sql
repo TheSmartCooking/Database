@@ -87,7 +87,7 @@ CREATE OR REPLACE TABLE ingredient_translation (
 ) ENGINE = InnoDB;
 
 CREATE TABLE recipe_status (
-    id TINYINT AUTO_INCREMENT PRIMARY KEY,
+    status_id TINYINT AUTO_INCREMENT PRIMARY KEY,
     status_name VARCHAR(25) UNIQUE NOT NULL
 ) ENGINE = InnoDB;
 
