@@ -1,4 +1,4 @@
 [sqlfluff]
 dialect = mariadb
-exlude_rules = PRS
-ignore = parsing, LT05
+exlude_rules = PRS, LT05
+ignore = parsing
