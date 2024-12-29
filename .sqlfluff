@@ -1,5 +1,5 @@
 [sqlfluff]
 dialect = mariadb
 max_line_length = 100
-exlude_rules = PRS, layout.spacing
-ignore = parsing, layout.spacing
+exlude_rules = PRS, layout.long_lines
+ignore = parsing, layout.long_lines
