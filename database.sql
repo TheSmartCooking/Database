@@ -86,6 +86,11 @@ CREATE OR REPLACE TABLE ingredient_translation (
     FOREIGN KEY (language_id) REFERENCES lang (language_id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
+CREATE TABLE recipe_status (
+    id TINYINT AUTO_INCREMENT PRIMARY KEY,
+    status_name VARCHAR(25) UNIQUE NOT NULL
+) ENGINE = InnoDB;
+
 CREATE OR REPLACE TABLE recipe (
     recipe_id INT AUTO_INCREMENT PRIMARY KEY,
     author_id INT NULL,
@@ -96,9 +101,10 @@ CREATE OR REPLACE TABLE recipe (
     difficulty_level TINYINT CHECK (difficulty_level BETWEEN 1 AND 3),
     number_of_reviews INT NULL,
     source VARCHAR(255) NULL,
-    recipe_status ENUM('draft', 'published', 'hidden', 'archived', 'pending review', 'rejected', 'scheduled', 'needs update', 'unlisted', 'deleted') NOT NULL DEFAULT 'draft',
+    recipe_status TINYINT NOT NULL DEFAULT 1,
     FOREIGN KEY (author_id) REFERENCES person (person_id) ON DELETE SET NULL,
-    FOREIGN KEY (picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE
+    FOREIGN KEY (picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE,
+    FOREIGN KEY (recipe_status) REFERENCES recipe_status (id) ON DELETE RESTRICT
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE recipe_ingredient (
