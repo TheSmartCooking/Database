@@ -8,8 +8,7 @@ CALL insert_responsibility(
 );
 CALL insert_responsibility(
     'can_view_audit_log',
-    'Allows access to view detailed records of database activities' ||
-    ' and changes for auditing purposes.'
+    'Allows access to view detailed records of database activities and changes for auditing purposes.'
 );
 
 -- Category management

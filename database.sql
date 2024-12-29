@@ -100,7 +100,7 @@ CREATE OR REPLACE TABLE recipe (
     cook_time INT UNSIGNED NULL,
     difficulty_level TINYINT CHECK (difficulty_level BETWEEN 1 AND 3),
     number_of_reviews INT NULL,
-    source VARCHAR(255) NULL,
+    recipe_source VARCHAR(255) NULL,
     recipe_status TINYINT NOT NULL DEFAULT 1,
     FOREIGN KEY (author_id) REFERENCES person (person_id) ON DELETE SET NULL,
     FOREIGN KEY (picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE,
