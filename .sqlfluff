@@ -1,4 +1,4 @@
 [sqlfluff]
 dialect = mariadb
 exlude_rules = PRS
-ignore = parsing, max_line_length
+ignore = parsing, layout.long_lines
