@@ -104,7 +104,7 @@ CREATE OR REPLACE TABLE recipe (
     recipe_status TINYINT NOT NULL DEFAULT 1,
     FOREIGN KEY (author_id) REFERENCES person (person_id) ON DELETE SET NULL,
     FOREIGN KEY (picture_id) REFERENCES picture (picture_id) ON DELETE CASCADE,
-    FOREIGN KEY (recipe_status) REFERENCES recipe_status (id) ON DELETE RESTRICT
+    FOREIGN KEY (recipe_status) REFERENCES recipe_status (status_id) ON DELETE RESTRICT
 ) ENGINE = InnoDB;
 
 CREATE OR REPLACE TABLE recipe_ingredient (
