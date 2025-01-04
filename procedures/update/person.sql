@@ -24,11 +24,11 @@ BEGIN
     FROM person;
 
     IF name_exists > 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User name already exists for another record';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User name already exists';
     END IF;
 
     IF email_exists > 0 THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email already exists for another record';
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Email already exists';
     END IF;
 
     -- Retrieve the language ID if provided
