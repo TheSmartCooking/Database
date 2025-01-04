@@ -44,22 +44,41 @@ BEGIN
 END //
 
 CREATE OR REPLACE PROCEDURE login_person(
+    IN p_person_id INT,
     IN p_email VARCHAR(100)
 )
 BEGIN
+    DECLARE v_person_id INT;
+    DECLARE v_hashed_password VARCHAR(100);
+    DECLARE v_salt BINARY(16);
+
     -- Check if the person exists
-    IF NOT EXISTS (
-        SELECT 1
-        FROM person
-        WHERE email = p_email
-    ) THEN
+    IF NOT person_exists(p_person_id, p_email) THEN
         SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'User not found';
     END IF;
 
-    -- Retrieve the hashed password and salt as a result set
+    -- Retrieve the person_id, hashed password, and salt
     SELECT person_id, hashed_password, salt
+    INTO v_person_id, v_hashed_password, v_salt
     FROM person
-    WHERE email = p_email;
+    WHERE (person_id = p_person_id OR email = p_email);
+
+    -- Return the result set
+    SELECT v_person_id AS person_id, v_hashed_password AS hashed_password, v_salt AS salt;
+END //
+
+CREATE OR REPLACE PROCEDURE login_person_by_id(
+    IN p_person_id INT
+)
+BEGIN
+    CALL login_person(p_person_id, NULL);
+END //
+
+CREATE OR REPLACE PROCEDURE login_person_by_email(
+    IN p_email VARCHAR(100)
+)
+BEGIN
+    CALL login_person(NULL, p_email);
 END //
 
 DELIMITER ;
