@@ -3,6 +3,32 @@ USE smartcooking;
 
 DELIMITER //
 
+CREATE OR REPLACE PROCEDURE get_recipe_by_id(
+    IN p_recipe_id INT,
+    IN p_language_iso_code CHAR(2)
+)
+BEGIN
+    SELECT
+        r.author_id,
+        p.person_name AS author_name,
+        r.picture_id,
+        r.cook_time,
+        r.difficulty_level,
+        r.number_of_reviews,
+        r.recipe_status,
+        rt.title,
+        rt.details,
+        rt.preparation,
+        rt.nutritional_information,
+        rt.video_url
+    FROM recipe r
+    INNER JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
+    INNER JOIN lang l ON rt.language_id = l.language_id
+    INNER JOIN person p ON r.author_id = p.person_id
+    WHERE r.recipe_id = p_recipe_id
+      AND l.iso_code = p_language_iso_code;
+END //
+
 -- Centralized procedure for fetching paginated recipes with filtering
 CREATE OR REPLACE PROCEDURE get_recipes_paginated(
     IN p_filter_condition TEXT,
