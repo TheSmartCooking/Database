@@ -11,10 +11,13 @@ BEGIN
     SELECT
         r.author_id,
         p.person_name AS author_name,
+        r.publication_date,
+        r.modification_date,
         r.picture_id,
         r.cook_time,
         r.difficulty_level,
         r.number_of_reviews,
+        r.recipe_status,
         r.recipe_status,
         rt.title,
         rt.details,
