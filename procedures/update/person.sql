@@ -3,6 +3,15 @@ USE smartcooking;
 
 DELIMITER //
 
+CREATE OR REPLACE PROCEDURE update_last_login(
+    IN p_person_id INT
+)
+BEGIN
+    UPDATE person
+    SET last_login = NOW()
+    WHERE person_id = p_person_id;
+END //
+
 CREATE OR REPLACE PROCEDURE update_person(
     IN p_person_id INT,
     IN p_name VARCHAR(100),
