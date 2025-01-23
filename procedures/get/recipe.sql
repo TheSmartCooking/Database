@@ -18,7 +18,6 @@ BEGIN
         r.difficulty_level,
         r.number_of_reviews,
         r.recipe_status,
-        r.recipe_status,
         rt.title,
         rt.details,
         rt.preparation,
@@ -40,7 +39,8 @@ CREATE OR REPLACE PROCEDURE get_recipes_paginated(
     IN p_language_iso_code CHAR(2),
     IN p_group_by TEXT,
     IN p_having_condition TEXT,
-    IN p_order_by TEXT
+    IN p_order_by TEXT,
+    IN p_filter_param TEXT
 )
 BEGIN
     DECLARE v_limit INT;
@@ -58,7 +58,7 @@ BEGIN
                  'WHERE l.iso_code = ? ';
 
     IF p_filter_condition IS NOT NULL THEN
-        SET @query = CONCAT(@query, p_filter_condition);
+        SET @query = CONCAT(@query, ' ', p_filter_condition);
     END IF;
 
     IF p_group_by IS NOT NULL THEN
@@ -76,7 +76,13 @@ BEGIN
     SET @query = CONCAT(@query, ' LIMIT ? OFFSET ?');
 
     PREPARE stmt FROM @query;
-    EXECUTE stmt USING p_language_iso_code, v_limit, v_offset;
+
+    IF p_filter_param IS NOT NULL THEN
+        EXECUTE stmt USING p_language_iso_code, p_filter_param, v_limit, v_offset;
+    ELSE
+        EXECUTE stmt USING p_language_iso_code, v_limit, v_offset;
+    END IF;
+
     DEALLOCATE PREPARE stmt;
 END //
 
@@ -87,7 +93,9 @@ CREATE OR REPLACE PROCEDURE get_all_recipes_paginated(
     IN p_language_iso_code CHAR(2)
 )
 BEGIN
-    CALL get_recipes_paginated(NULL, p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL);
+    CALL get_recipes_paginated(
+        NULL, p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, NULL
+    );
 END //
 
 -- Procedure for retrieving recipes by author with pagination
@@ -98,7 +106,9 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_author_paginated(
     IN p_language_iso_code CHAR(2)
 )
 BEGIN
-    CALL get_recipes_paginated('AND r.author_id = ?', p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL);
+    CALL get_recipes_paginated(
+        'AND r.author_id = ?', p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, NULL
+    );
 END //
 
 -- Procedure for retrieving top-rated recipes with pagination
@@ -113,7 +123,7 @@ BEGIN
         'INNER JOIN recipe_rating rr ON r.recipe_id = rr.recipe_id',
         p_limit, p_offset, p_language_iso_code, 'GROUP BY r.recipe_id',
         'HAVING AVG(rr.rating) >= ?',
-        'ORDER BY AVG(rr.rating) DESC'
+        'ORDER BY AVG(rr.rating) DESC', NULL
     );
 END //
 
@@ -156,7 +166,7 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_category_paginated(
 BEGIN
     CALL get_recipes_paginated(
         'INNER JOIN recipe_category rc ON r.recipe_id = rc.recipe_id AND rc.category_id = ?',
-        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL
+        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, NULL
     );
 END //
 
@@ -171,7 +181,7 @@ BEGIN
     CALL get_recipes_paginated(
         'INNER JOIN recipe_tag rtg ON r.recipe_id = rtg.recipe_id '
         'AND JSON_CONTAINS(?, JSON_QUOTE(rtg.tag))',
-        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL
+        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, NULL
     );
 END //
 
@@ -188,7 +198,8 @@ BEGIN
 
     CALL get_recipes_paginated(
         'AND rt.title LIKE ?',
-        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL
+        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL,
+        v_safe_recipe_name
     );
 END //
 
