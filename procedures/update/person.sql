@@ -17,7 +17,6 @@ CREATE OR REPLACE PROCEDURE update_person(
     IN p_name VARCHAR(100),
     IN p_email VARCHAR(100),
     IN p_hashed_password VARBINARY(255),
-    IN p_salt BINARY(16),
     IN p_language_iso_code CHAR(2)
 )
 BEGIN
@@ -59,7 +58,6 @@ BEGIN
         person_name = COALESCE(p_name, person_name),
         email = COALESCE(p_email, email),
         hashed_password = COALESCE(p_hashed_password, hashed_password),
-        salt = COALESCE(p_salt, salt),
         language_id = COALESCE(v_language_id, language_id)
     WHERE person_id = p_person_id;
 END //
