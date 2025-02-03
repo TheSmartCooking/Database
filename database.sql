@@ -16,7 +16,6 @@ CREATE OR REPLACE TABLE person (
     person_name VARCHAR(100) UNIQUE,
     email VARCHAR(100) UNIQUE,
     hashed_password VARCHAR(100),
-    salt BINARY(16),
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,
     language_id INT NULL,
