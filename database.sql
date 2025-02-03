@@ -100,6 +100,7 @@ CREATE OR REPLACE TABLE recipe (
     cook_time INT UNSIGNED NULL,
     servings INT UNSIGNED NULL,
     difficulty_level TINYINT CHECK (difficulty_level BETWEEN 1 AND 3),
+    estimated_cost TINYINT CHECK (estimated_cost BETWEEN 1 AND 3),
     number_of_reviews INT NULL,
     recipe_source VARCHAR(255) NULL,
     recipe_status TINYINT NOT NULL DEFAULT 1,
