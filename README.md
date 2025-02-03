@@ -11,21 +11,21 @@ To set up the database locally, you'll need Docker installed. Follow the steps b
 
 1. **Build the Docker Image**:
 
-    ```bash
-    docker build -t smartcooking-mariadb .
-    ```
+   ```bash
+   docker build -t smartcooking-mariadb .
+   ```
 
 2. **Run the Docker Container**:
 
-    ```bash
-    docker run -d -p 3306:3306 --name Smart-Cooking_Database -e MYSQL_ROOT_PASSWORD=myrootpassword smartcooking-mariadb
-    ```
+   ```bash
+   docker run -d -p 3306:3306 --name Smart-Cooking_Database -e MYSQL_ROOT_PASSWORD=myrootpassword smartcooking-mariadb
+   ```
 
 3. **Access the Database**:
 
-    ```bash
-    docker exec -it Smart-Cooking_Database mariadb -uroot -pmyrootpassword smartcooking
-    ```
+   ```bash
+   docker exec -it Smart-Cooking_Database mariadb -uroot -pmyrootpassword smartcooking
+   ```
 
 ## Database Schema Overview
 
