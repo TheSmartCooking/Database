@@ -111,22 +111,6 @@ BEGIN
     );
 END //
 
--- Procedure for retrieving top-rated recipes with pagination
-CREATE OR REPLACE PROCEDURE get_top_rated_recipes_paginated(
-    IN p_min_rating TINYINT,
-    IN p_limit INT,
-    IN p_offset INT,
-    IN p_language_iso_code CHAR(2)
-)
-BEGIN
-    CALL get_recipes_paginated(
-        'INNER JOIN recipe_rating rr ON r.recipe_id = rr.recipe_id',
-        p_limit, p_offset, p_language_iso_code, 'GROUP BY r.recipe_id',
-        'HAVING AVG(rr.rating) >= ?',
-        'ORDER BY AVG(rr.rating) DESC', NULL
-    );
-END //
-
 -- Procedure for retrieving recipes liked by a person with pagination
 CREATE OR REPLACE PROCEDURE get_recipes_liked_by_person_paginated(
     IN p_person_id INT,
