@@ -170,3 +170,16 @@ CREATE OR REPLACE TABLE comment_like (
     FOREIGN KEY (person_id) REFERENCES person (person_id) ON DELETE CASCADE,
     FOREIGN KEY (comment_id) REFERENCES comment (comment_id) ON DELETE CASCADE
 ) ENGINE = InnoDB;
+
+CREATE OR REPLACE TABLE category (
+    category_id INT AUTO_INCREMENT PRIMARY KEY,
+    category_name VARCHAR(50) UNIQUE
+) ENGINE = InnoDB;
+
+CREATE OR REPLACE TABLE recipe_category (
+    recipe_id INT,
+    category_id INT,
+    PRIMARY KEY (recipe_id, category_id),
+    FOREIGN KEY (recipe_id) REFERENCES recipe (recipe_id) ON DELETE CASCADE,
+    FOREIGN KEY (category_id) REFERENCES category (category_id) ON DELETE CASCADE
+) ENGINE = InnoDB;
