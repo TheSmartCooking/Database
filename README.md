@@ -44,7 +44,6 @@ The database schema consists of the following tables:
 11. **comment_like**: Tracks likes on comments.
 12. **favorite**: Stores information about users' favorite recipes.
 13. **recipe_tag**: Represents a many-to-many relationship between recipes and tags.
-14. **recipe_rating**: Stores ratings given by users to recipes.
 
 ## Usage
 
