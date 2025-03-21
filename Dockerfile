@@ -20,11 +20,9 @@ RUN find "${TEMP_SQL_DIR:?}/" -type f -name "*.sql" | while read -r file; do \
     done && \
     rm -rf "${TEMP_SQL_DIR:?}/"
 
-# Set ownership
-RUN chown -R dbuser:dbuser /docker-entrypoint-initdb.d
-
-# Adjust permissions on the MySQL data directory
-RUN chown -R dbuser:dbuser /var/lib/mysql /etc/mysql
+# Set ownership and adjust permissions on the MySQL data directory
+RUN chown -R dbuser:dbuser /docker-entrypoint-initdb.d && \
+    chown -R dbuser:dbuser /var/lib/mysql /etc/mysql
 
 # Expose the default MariaDB port (3306)
 EXPOSE 3306

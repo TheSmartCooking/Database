@@ -1,0 +1,16 @@
+{
+    "name": "Smart Cooking Database Development Container",
+    "dockerFile": "Dockerfile",
+    "customizations": {
+        "settings": {
+            "terminal.integrated.shell.linux": "/bin/bash"
+        },
+        "vscode": {
+            "extensions": [
+                "mtxr.sqltools-driver-mysql"
+            ]
+        }
+    },
+    "postStartCommand": "ls -l && bash ./organize-sql.sh",
+    "remoteUser": "vscode"
+}
