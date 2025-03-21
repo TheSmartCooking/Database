@@ -2,7 +2,11 @@ FROM alpine:latest
 
 # Install common tools
 RUN apk add --no-cache bash git \
-    mariadb mariadb-client
+    mariadb mariadb-client \
+    python3 py3-pip
+
+# Install sqlfluff for SQL linting
+RUN ["/bin/bash", "-c", "pip3 --disable-pip-version-check --no-cache-dir install sqlfluff --break-system-packages"]
 
 # Setup default user
 ARG USERNAME=vscode

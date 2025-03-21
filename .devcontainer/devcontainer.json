@@ -7,10 +7,11 @@
         },
         "vscode": {
             "extensions": [
-                "mtxr.sqltools-driver-mysql"
+                "mtxr.sqltools-driver-mysql",
+                "dorzey.vscode-sqlfluff"
             ]
         }
     },
-    "postStartCommand": "ls -l && bash ./organize-sql.sh",
+    "postStartCommand": "sqlfluff fix",
     "remoteUser": "vscode"
 }
