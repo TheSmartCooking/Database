@@ -14,8 +14,8 @@ CREATE OR REPLACE TABLE lang (
 CREATE OR REPLACE TABLE person (
     person_id INT AUTO_INCREMENT PRIMARY KEY,
     person_name VARCHAR(100) UNIQUE,
-    hashed_email VARCHAR(100) UNIQUE,
-    encrypted_email VARCHAR(100) UNIQUE,
+    hashed_email VARCHAR(255) UNIQUE,
+    encrypted_email VARCHAR(255) UNIQUE,
     hashed_password VARCHAR(100),
     registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_login TIMESTAMP NULL,

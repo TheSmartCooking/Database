@@ -5,8 +5,8 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE register_person(
     IN p_name VARCHAR(100),
-    IN p_hashed_email VARCHAR(100),
-    IN p_encrypted_email VARCHAR(100),
+    IN p_hashed_email VARCHAR(255),
+    IN p_encrypted_email VARCHAR(255),
     IN p_hashed_password VARBINARY(255),
     IN p_language_iso_code CHAR(2)
 )
@@ -45,7 +45,7 @@ END //
 
 CREATE OR REPLACE PROCEDURE login_person(
     IN p_person_id INT,
-    IN p_hashed_email VARCHAR(100)
+    IN p_hashed_email VARCHAR(255)
 )
 BEGIN
     DECLARE v_person_id INT;
@@ -74,7 +74,7 @@ BEGIN
 END //
 
 CREATE OR REPLACE PROCEDURE login_person_by_email(
-    IN p_hashed_email VARCHAR(100)
+    IN p_hashed_email VARCHAR(255)
 )
 BEGIN
     CALL login_person(NULL, p_hashed_email);

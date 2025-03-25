@@ -25,7 +25,7 @@ BEGIN
     WHERE person_id = p_person_id;
 END //
 
-CREATE OR REPLACE PROCEDURE get_person_by_email(IN p_hashed_email VARCHAR(100))
+CREATE OR REPLACE PROCEDURE get_person_by_email(IN p_hashed_email VARCHAR(255))
 BEGIN
     SELECT person_id, person_name, language_id
     FROM person

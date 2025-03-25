@@ -15,8 +15,8 @@ END //
 CREATE OR REPLACE PROCEDURE update_person(
     IN p_person_id INT,
     IN p_name VARCHAR(100),
-    IN p_hashed_email VARCHAR(100),
-    IN p_encrypted_email VARCHAR(100),
+    IN p_hashed_email VARCHAR(255),
+    IN p_encrypted_email VARCHAR(255),
     IN p_hashed_password VARBINARY(255),
     IN p_language_iso_code CHAR(2)
 )
