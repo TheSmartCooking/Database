@@ -5,8 +5,8 @@ DELIMITER //
 
 CREATE OR REPLACE PROCEDURE register_person(
     IN p_name VARCHAR(100),
-    IN p__hashed_email VARCHAR(100),
-    IN p__encrypted_email VARCHAR(100),
+    IN p_hashed_email VARCHAR(100),
+    IN p_encrypted_email VARCHAR(100),
     IN p_hashed_password VARBINARY(255),
     IN p_language_iso_code CHAR(2)
 )
@@ -40,7 +40,7 @@ BEGIN
 
     -- Insert the new person into the database
     INSERT INTO person (person_name, hashed_email, encrypted_email, hashed_password, language_id)
-    VALUES (p_name, p_hashed_email, p__encrypted_email, p_hashed_password, v_language_id);
+    VALUES (p_name, p_hashed_email, p_encrypted_email, p_hashed_password, v_language_id);
 END //
 
 CREATE OR REPLACE PROCEDURE login_person(
