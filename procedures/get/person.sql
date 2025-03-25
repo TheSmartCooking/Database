@@ -37,7 +37,7 @@ BEGIN
     SELECT
         p.person_id,
         p.name,
-        p.encrypted_email
+        p.encrypted_email,
         (SELECT COUNT(*) FROM comment c WHERE c.person_id = p.person_id) AS total_comments,
         (SELECT COUNT(*)
          FROM comment_like cl
