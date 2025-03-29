@@ -15,7 +15,8 @@ END //
 CREATE OR REPLACE PROCEDURE update_person(
     IN p_person_id INT,
     IN p_name VARCHAR(100),
-    IN p_email VARCHAR(100),
+    IN p_hashed_email VARCHAR(255),
+    IN p_encrypted_email VARCHAR(255),
     IN p_hashed_password VARBINARY(255),
     IN p_language_iso_code CHAR(2)
 )
@@ -27,7 +28,7 @@ BEGIN
     -- Check if the person name or email already exists
     SELECT
         SUM(person_name = p_name AND person_id != p_person_id),
-        SUM(email = p_email AND person_id != p_person_id)
+        SUM(hashed_email = p_hashed_email AND person_id != p_person_id)
     INTO name_exists, email_exists
     FROM person;
 
@@ -56,7 +57,8 @@ BEGIN
     UPDATE person
     SET
         person_name = COALESCE(p_name, person_name),
-        email = COALESCE(p_email, email),
+        hashed_email = COALESCE(p_hashed_email, hashed_email),
+        encrypted_email = COALESCE(p_encrypted_email, encrypted_email),
         hashed_password = COALESCE(p_hashed_password, hashed_password),
         language_id = COALESCE(v_language_id, language_id)
     WHERE person_id = p_person_id;
