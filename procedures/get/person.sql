@@ -10,7 +10,7 @@ BEGIN
         person_id,
         person_name,
         language_id,
-        mask_email(email) AS masked_email
+        encrypted_email
     FROM person;
 END //
 
@@ -20,16 +20,16 @@ BEGIN
         person_id,
         person_name,
         language_id,
-        mask_email(email) AS masked_email
+        encrypted_email
     FROM person
     WHERE person_id = p_person_id;
 END //
 
-CREATE OR REPLACE PROCEDURE get_person_by_email(IN p_email VARCHAR(100))
+CREATE OR REPLACE PROCEDURE get_person_by_email(IN p_hashed_email VARCHAR(255))
 BEGIN
     SELECT person_id, person_name, language_id
     FROM person
-    WHERE email = p_email;
+    WHERE hashed_email = p_hashed_email;
 END //
 
 CREATE OR REPLACE PROCEDURE get_person_activity_summary(IN p_person_id INT)
@@ -37,7 +37,7 @@ BEGIN
     SELECT
         p.person_id,
         p.name,
-        mask_email(p.email) AS masked_email,
+        p.encrypted_email,
         (SELECT COUNT(*) FROM comment c WHERE c.person_id = p.person_id) AS total_comments,
         (SELECT COUNT(*)
          FROM comment_like cl
