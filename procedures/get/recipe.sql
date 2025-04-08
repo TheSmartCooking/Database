@@ -9,15 +9,20 @@ CREATE OR REPLACE PROCEDURE get_recipe_by_id(
 )
 BEGIN
     SELECT
+        r.recipe_id,
         r.author_id,
         p.person_name AS author_name,
         r.publication_date,
         r.modification_date,
         r.picture_id,
+        r.preparation_time,
         r.cook_time,
+        r.servings,
         r.difficulty_level,
+        r.estimated_cost,
         r.number_of_reviews,
-        r.recipe_status,
+        r.recipe_source,
+        rs.status_name AS recipe_status,
         rt.title,
         rt.details,
         rt.preparation,
@@ -27,6 +32,7 @@ BEGIN
     INNER JOIN recipe_translation rt ON r.recipe_id = rt.recipe_id
     INNER JOIN lang l ON rt.language_id = l.language_id
     INNER JOIN person p ON r.author_id = p.person_id
+    INNER JOIN recipe_status rs ON r.recipe_status = rs.status_id
     WHERE r.recipe_id = p_recipe_id
       AND l.iso_code = p_language_iso_code;
 END //
@@ -107,7 +113,7 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_author_paginated(
 )
 BEGIN
     CALL get_recipes_paginated(
-        'AND r.author_id = ?', p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, NULL
+        'AND r.author_id = ?', p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, p_author_id
     );
 END //
 
@@ -150,7 +156,7 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_category_paginated(
 BEGIN
     CALL get_recipes_paginated(
         'INNER JOIN recipe_category rc ON r.recipe_id = rc.recipe_id AND rc.category_id = ?',
-        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, NULL
+        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, p_category_id
     );
 END //
 
@@ -163,9 +169,8 @@ CREATE OR REPLACE PROCEDURE get_recipes_by_tags_paginated(
 )
 BEGIN
     CALL get_recipes_paginated(
-        'INNER JOIN recipe_tag rtg ON r.recipe_id = rtg.recipe_id '
-        'AND JSON_CONTAINS(?, JSON_QUOTE(rtg.tag))',
-        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, NULL
+        'INNER JOIN recipe_tag rtg ON r.recipe_id = rtg.recipe_id AND JSON_CONTAINS(?, JSON_QUOTE(rtg.tag))',
+        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, p_tags
     );
 END //
 
