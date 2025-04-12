@@ -10,17 +10,16 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Create a non-root user and group
 RUN groupadd -r dbuser && useradd -r -g dbuser dbuser
 
-# Copy all files into a temporary location
+# Copy files and scripts and set permissions
 COPY . ${TEMP_SQL_DIR}/
+COPY scripts/*.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/*.sh
 
-# Flatten the directory structure and rename files to include folder names
-RUN find "${TEMP_SQL_DIR:?}/" -type f -name "*.sql" | while read -r file; do \
-    new_name=$(echo "$file" | sed "s|${TEMP_SQL_DIR:?}/||" | sed 's|/|_|g' | sed 's|^_||'); \
-    cp "$file" "/docker-entrypoint-initdb.d/$new_name"; \
-    done && \
-    rm -rf "${TEMP_SQL_DIR:?}/"
+# Run the flattening script
+RUN [ -f /usr/local/bin/flatten-sql-files.sh ] && \
+    /usr/local/bin/flatten-sql-files.sh || echo "No flatten-sql-files.sh script found"
 
-# Set ownership and adjust permissions on the MySQL data directory
+# Copy the flattened SQL files to the initialization directory
 RUN chown -R dbuser:dbuser /docker-entrypoint-initdb.d && \
     chown -R dbuser:dbuser /var/lib/mysql /etc/mysql
 
