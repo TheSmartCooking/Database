@@ -11,7 +11,6 @@ CREATE OR REPLACE PROCEDURE insert_recipe (
     IN p_servings INT,
     IN p_difficulty_level TINYINT,
     IN p_estimated_cost TINYINT,
-    IN p_number_of_reviews INT,
     IN p_recipe_source VARCHAR(255),
     IN p_recipe_status_name VARCHAR(25)
 )
@@ -38,7 +37,6 @@ BEGIN
         servings,
         difficulty_level,
         estimated_cost,
-        number_of_reviews,
         recipe_source,
         recipe_status,
         modification_date
@@ -50,7 +48,6 @@ BEGIN
         p_servings,
         p_difficulty_level,
         p_estimated_cost,
-        p_number_of_reviews,
         p_recipe_source,
         v_status_id,
         CURRENT_TIMESTAMP
