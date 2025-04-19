@@ -192,4 +192,26 @@ BEGIN
     );
 END //
 
+-- Procedure for retrieving recipes by status with pagination
+CREATE OR REPLACE PROCEDURE get_recipes_by_status_paginated(
+    IN p_status_name INT,
+    IN p_limit INT,
+    IN p_offset INT,
+    IN p_language_iso_code CHAR(2)
+)
+BEGIN
+    DECLARE v_status_id INT;
+    SELECT status_id INTO v_status_id
+    FROM recipe_status
+    WHERE status_name = p_status_name;
+    IF v_status_id IS NULL THEN
+        v_status_id = 1; -- Default to 'draft' (status_id = 1) if the status name is not found
+    END IF;
+
+    CALL get_recipes_paginated(
+        'AND r.recipe_status = ?',
+        p_limit, p_offset, p_language_iso_code, NULL, NULL, NULL, v_status_id
+    );
+END //
+
 DELIMITER ;
