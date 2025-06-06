@@ -8,12 +8,9 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
-    "emeraldwalk.runonsave": {
-        "commands": [
-            {
-                "match": "*.sql",
-                "cmd": "sqlfluff fix '${fileBasename}'"
-            }
+    "triggerTaskOnSave.tasks": {
+        "Lint SQL File": [
+            "**/*.sql"
         ]
-    }
+    },
 }

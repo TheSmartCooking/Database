@@ -7,12 +7,12 @@
         },
         "vscode": {
             "extensions": [
-                "mtxr.sqltools-driver-mysql",
                 "dorzey.vscode-sqlfluff",
-                "emeraldwalk.RunOnSave"
+                "gruntfuggly.triggertaskonsave",
+                "mtxr.sqltools-driver-mysql"
             ]
         }
     },
-    "postStartCommand": "sqlfluff fix",
+    "postAttachCommand": "sqlfluff fix -v",
     "remoteUser": "vscode"
 }
