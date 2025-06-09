@@ -12,7 +12,7 @@
             "problemMatcher": [],
             "runOptions": {
                 "runOn": "default"
-            },
+            }
         }
     ]
 }
