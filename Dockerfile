@@ -10,12 +10,8 @@ SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 # Copy all files into a temporary location
 COPY . ${TEMP_SQL_DIR}/
 
-# Flatten the directory structure and rename files to include folder names
-RUN find "${TEMP_SQL_DIR:?}/" -type f -name "*.sql" | while read -r file; do \
-    new_name=$(echo "$file" | sed "s|${TEMP_SQL_DIR:?}/||" | sed 's|/|_|g' | sed 's|^_||'); \
-    cp "$file" "/docker-entrypoint-initdb.d/$new_name"; \
-    done && \
-    rm -rf "${TEMP_SQL_DIR:?}/"
+# Run the flatten script
+RUN chmod +x ${TEMP_SQL_DIR}/flatten-sql.sh && ${TEMP_SQL_DIR}/flatten-sql.sh
 
 # Expose the default MariaDB port (3306)
 EXPOSE 3306
